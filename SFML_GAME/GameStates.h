@@ -7,12 +7,21 @@ class GameStates :
     public State
 {
 private:
+    sf::Texture backgroundTexture;
+    sf::RectangleShape background;
     Player* player;
-    Enemy* enemy;
+    Enemy* enemy[20];
     Sword* sword;
+    #define enemy_size 20
+    //sf::Vector2f enemies;
+    //sf::Vector2f posenemy, posplayer;
+
     //Functions
+
+    void initBackground();
     void initTextures();
     void initEntity();
+    
 
 public:
     GameStates(sf::RenderWindow* window, std::stack<State*>* states);

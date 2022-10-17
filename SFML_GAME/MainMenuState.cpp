@@ -41,6 +41,10 @@ void MainMenuState::initButton()
 	this->buttons["END_STATE"] = new Button(250.f, 380.f, 250.f, 50.f, &this->font, "QUIT",50,
 		sf::Color(70, 70, 70, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));
+
+	this->buttons["CREDITS"] = new Button(1535.f, 10.f, 250.f, 50.f, &this->font, "65010421 TANAPHAT SOMBOON", 40,
+		sf::Color(250, 250, 250, 250), sf::Color(250, 250, 250, 250), sf::Color(800, 250, 250, 250),
+		sf::Color(250, 250, 250, 0), sf::Color(250, 250, 250, 0), sf::Color(20, 20, 20, 0));
 }
 
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
@@ -79,7 +83,11 @@ void MainMenuState::updateButtons()
 	{
 		this->states->push(new GameStates(this->window,this->states));
 	}
-
+	//Scoreboard
+	if (this->buttons["SCOREBOARD"]->isPressed())
+	{
+		this->states->push(new Scoreboard(this->window, this->states));
+	}
 	//quit
 	if (this->buttons["END_STATE"]->isPressed())
 	{

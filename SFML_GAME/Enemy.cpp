@@ -20,7 +20,6 @@ Enemy::~Enemy()
 void Enemy::update(const float& dt)
 {
 	this->movementComponents->update(dt);
-
 	if (this->movementComponents->getState(IDLE))
 		this->animationComponent->play("IDLE_RIGHT", dt);
 	else if (this->movementComponents->getState(MOVING_RIGHT) || this->movementComponents->getState(MOVING_DOWN))

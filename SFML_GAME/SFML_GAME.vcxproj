@@ -149,6 +149,7 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MovementComponents.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Sword.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MovementComponents.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Sword.h" />
   </ItemGroup>
