@@ -44,11 +44,4 @@ void Scoreboard::render(sf::RenderTarget* target)
 
 	target->draw(this->background);
 
-	/*this->player->render(target);
-	this->sword->render(target);
-	for (int i = 0; i < enemy_size; i++)
-	{
-		this->enemy[i]->render(target);
-	}*/
-
 }

@@ -42,35 +42,8 @@ private:
 			this->sprite.setTextureRect(this->startRect);
 		}
 		//Functions
-		void play(const float& dt)
-		{
-			//Update timer
-			this->timer += 100.f * dt;
-			if (this->timer >= this->animationTimer)
-			{
-				//reset timer
-				this->timer = 0.f;
-
-				//animate
-				if (this->currentRect != this->endRect)
-				{
-					this->currentRect.left += this->width;
-
-				}
-				else //reset
-				{
-					this->currentRect.left = this->startRect.left;
-				}
-
-				this->sprite.setTextureRect(this->currentRect);
-			}
-		}
-
-		void reset()
-		{
-			this->timer = 0.f;
-			this->currentRect = this->startRect;
-		}
+		void play(const float& dt);
+		void reset();
 	};
 
 	sf::Sprite& sprite;

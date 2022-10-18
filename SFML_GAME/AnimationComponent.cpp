@@ -1,5 +1,34 @@
 #include "AnimationComponent.h"
 
+void AnimationComponent::Animation::play(const float& dt)
+{
+	//Update timer
+	this->timer += 100.f * dt;
+	if (this->timer >= this->animationTimer)
+	{
+		//reset timer
+		this->timer = 0.f;
+
+		//animate
+		if (this->currentRect != this->endRect)
+		{
+			this->currentRect.left += this->width;
+		}
+		else //reset
+		{
+			this->currentRect.left = this->startRect.left;
+		}
+
+		this->sprite.setTextureRect(this->currentRect);
+	}
+}
+
+void AnimationComponent::Animation::reset()
+{
+	this->timer = 0.f;
+	this->currentRect = this->startRect;
+}
+
 AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& texture_sheet)
 	:sprite(sprite), textureSheet(texture_sheet), lastAnimation(NULL)
 {

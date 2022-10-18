@@ -12,6 +12,7 @@ private:
 	//Init Functions
 	void initVariables();
 	void initComponents();
+	int Move = 0;
 
 public:
 	Player(float x, float y, sf::Texture& texture_sheet);

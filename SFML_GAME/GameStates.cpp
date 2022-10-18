@@ -66,27 +66,23 @@ void GameStates::updateInput(const float& dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		this->player->move(-1.f, 0.f, dt);
-		this->sword->move(-1.f, 0.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		this->player->move(1.f, 0.f, dt);
-		this->sword->move(1.f, 0.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		this->player->move(0.f, -1.f, dt);
-		this->sword->move(0.f, -1.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		this->player->move(0.f, 1.f, dt);
-		this->sword->move(0.f, 1.f, dt);
 	}
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		this->sword->move(-10.f, 0.f, dt);
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		this->sword->move(10.f, 0.f, dt);
+		this->sword->move(10.f, 0.f, dt);*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		this->endState();
 	for (int i = 0; i < enemy_size; i++)
