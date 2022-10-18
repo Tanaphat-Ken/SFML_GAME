@@ -30,9 +30,9 @@ private:
 
 		Animation(sf::Sprite& sprite, sf::Texture& texture_sheet, float animation_timer,
 			int start_frame_x, int start_frame_y, int frames_x, int frames_y, int width, int height)
-			: sprite(sprite), textureSheet(texture_sheet), animationTimer(animation_timer), width(width), height(height)
+			: sprite(sprite), textureSheet(texture_sheet), animationTimer(animation_timer), 
+			timer(0.f), width(width), height(height)
 		{
-			this->timer = 0.f;
 			this->startRect = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			this->currentRect = this->startRect;
 			this->endRect = sf::IntRect(frames_x * width, frames_y * height, width, height);
