@@ -42,7 +42,7 @@ void MainMenuState::initButton()
 		sf::Color(70, 70, 70, 200), sf::Color(250, 250, 250, 250), sf::Color(20, 20, 20, 50),
 		sf::Color(100, 100, 100, 0), sf::Color(150, 150, 150, 0), sf::Color(20, 20, 20, 0));
 
-	this->buttons["CREDITS"] = new Button(1535.f, 10.f, 250.f, 50.f, &this->font, "65010421 TANAPHAT SOMBOON", 40,
+	this->buttons["CREDITS"] = new Button(1400.f, 10.f, 490.f, 50.f, &this->font, "65010421 TANAPHAT SOMBOON", 40,
 		sf::Color(250, 250, 250, 250), sf::Color(250, 250, 250, 250), sf::Color(800, 250, 250, 250),
 		sf::Color(250, 250, 250, 0), sf::Color(250, 250, 250, 0), sf::Color(20, 20, 20, 0));
 }
