@@ -37,7 +37,7 @@ void GameStates::initEntity()
 	{
 		this->enemy[i] = new Enemy(rand() % 1000 - 1000, rand() % 950, this->textures["ENEMY_SHEET"]);
 	}
-	this->sword = new Sword(924, 520, this->textures["SWORD"]);
+	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
 }
 
 

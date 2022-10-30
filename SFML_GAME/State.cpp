@@ -19,6 +19,7 @@ const bool& State::getEnd() const
 
 void State::endState()
 {
+	window->setMouseCursorVisible(true);
 	this->End = true;
 }
 
