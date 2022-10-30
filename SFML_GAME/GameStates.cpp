@@ -33,13 +33,9 @@ void GameStates::initTextures()
 void GameStates::initEntity()
 {
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
-	for (int i = 0; i < enemy_size; i++)
-	{
-		this->enemy[i] = new Enemy(rand() % 1000 - 1000, rand() % 950, this->textures["ENEMY_SHEET"]);
-	}
-	this->sword = new Sword(924, 520, this->textures["SWORD"]);
+	this->enemy = new Enemy();
+	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
 }
-
 
 //CON /DES
 GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
@@ -54,10 +50,7 @@ GameStates::~GameStates()
 {
 	delete this->player;
 	delete this->sword;
-	for (int i = 0; i < enemy_size; i++)
-	{
-		delete this->enemy[i];
-	}
+	delete this->enemy;
 }
 
 void GameStates::updateInput(const float& dt)
@@ -85,11 +78,6 @@ void GameStates::updateInput(const float& dt)
 		this->sword->move(10.f, 0.f, dt);*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		this->endState();
-	for (int i = 0; i < enemy_size; i++)
-	{
-		this->enemy[i]->move(1.f, 0.f, dt);
-	}
-	
 
 	//MOVING ENEMY??
 	/*if (this->player->getPostision() > this->enemy->getPostision())
@@ -110,10 +98,8 @@ void GameStates::update(const float& dt)
 
 	this->player->update(dt);
 	this->sword->update(dt);
-	for (int i = 0; i < enemy_size; i++)
-	{
-		this->enemy[i]->update(dt);
-	}
+	this->enemy->update(dt);
+	
 	
 }
 
@@ -124,9 +110,9 @@ void GameStates::render(sf::RenderTarget* target)
 	target->draw(this->background);
 	this->player->render(target);	
 	this->sword->render(target);
-	for (int i = 0; i < enemy_size; i++)
+	/*for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i]->render(target);
-	}
-	
+	}*/
+
 }

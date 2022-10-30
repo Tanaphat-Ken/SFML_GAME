@@ -82,6 +82,7 @@ void MainMenuState::updateButtons()
 	if (this->buttons["GAME_STATE"]->isPressed())
 	{
 		this->states->push(new GameStates(this->window,this->states));
+		window->setMouseCursorVisible(false);
 	}
 	//Scoreboard
 	if (this->buttons["SCOREBOARD"]->isPressed())

@@ -9,12 +9,10 @@ class GameStates :
 private:
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
+
     Player* player;
-    Enemy* enemy[20];
+    Enemy* enemy;
     Sword* sword;
-    #define enemy_size 20
-    //sf::Vector2f enemies;
-    //sf::Vector2f posenemy, posplayer;
 
     //Functions
 

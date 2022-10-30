@@ -2,7 +2,6 @@
 
 void AnimationComponent::Animation::play(const float& dt)
 {
-	//BUG ==> cant press 2 button at once
 	//Update timer
 	this->timer += 100.f * dt;
 	if (this->timer >= this->animationTimer)
