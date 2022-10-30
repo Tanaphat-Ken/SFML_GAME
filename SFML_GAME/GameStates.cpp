@@ -121,12 +121,13 @@ void GameStates::render(sf::RenderTarget* target)
 {
 	if (!target)
 		target = this->window;
+	this->renderTexture.clear();
 	target->draw(this->background);
-	this->player->render(target);	
+	this->player->render(this->renderTexture);
 	this->sword->render(target);
 	for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i]->render(target);
 	}
-	
+	this->renderTexture.display();
 }

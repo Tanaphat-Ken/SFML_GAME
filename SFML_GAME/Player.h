@@ -20,7 +20,7 @@ public:
 
 	//Functions
 	virtual void update(const float& dt);
-
+	void render(sf::RenderTarget& target);
 };
 
 #endif

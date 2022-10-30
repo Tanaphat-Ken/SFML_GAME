@@ -4,15 +4,17 @@
 #include "State.h"
 
 class GameStates :
-    public State
+    public State 
 {
 private:
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
+    sf::RenderTexture renderTexture;
     Player* player;
     Enemy* enemy[20];
     Sword* sword;
     #define enemy_size 20
+    HitboxComponent* hitboxComponent;
     //sf::Vector2f enemies;
     //sf::Vector2f posenemy, posplayer;
 
@@ -30,7 +32,7 @@ public:
     //Functions
     void updateInput(const float& dt);
     void update(const float& dt);
-    void render(sf::RenderTarget* target = nullptr);
+    void render(sf::RenderTarget* target = NULL);
 };
 
 #endif

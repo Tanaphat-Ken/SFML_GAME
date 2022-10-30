@@ -14,7 +14,7 @@ void Player::initComponents()
 Player::Player(float x,float y,sf::Texture& texture_sheet)
 {
 	//this->initVariables();
-
+	this->createHitboxComponent(this->sprite, 16.f, 26.f, 32.f, 38.f);
 	this->setPostision(x, y);
 	this->createMovementComponent(300.f, 15.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
@@ -34,6 +34,8 @@ Player::~Player()
 void Player::update(const float& dt)
 {
 	this->movementComponents->update(dt);
+
+	this->hitboxComponent->update();
 
 	if (this->movementComponents->getState(MOVING))
 	{
@@ -66,4 +68,10 @@ void Player::update(const float& dt)
 			this->animationComponent->play("WALK_RIGHT", dt);
 	}
 
+}
+
+void Player::render(sf::RenderTarget& target)
+{
+	target.draw(this->sprite);
+	this->hitboxComponent->render(target);
 }
