@@ -50,7 +50,7 @@ void GameStates::initEntity()
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
 	for (int i = 0; i < enemy_size; i++)
 	{
-		this->enemy[i] = new Enemy(rand() % 1000 - 1000, rand() % 950, this->textures["ENEMY_SHEET"]);
+		this->enemy[i] = new Enemy(rand() % 1920, rand() % 950, this->textures["ENEMY_SHEET"]);
 	}
 	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
 }
@@ -100,37 +100,42 @@ void GameStates::updatePlayerInput(const float& dt)
 	//update player input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		this->player->move(-1.f, 0.f, dt);
+		if(this->player->getPosition().x < 30)
+			this->player->move(1.f, 0.f, dt);
+		else
+			this->player->move(-1.f, 0.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		this->player->move(1.f, 0.f, dt);
+		if (this->player->getPosition().x > 1850)
+			this->player->move(-1.f, 0.f, dt);
+		else
+			this->player->move(1.f, 0.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		this->player->move(0.f, -1.f, dt);
+		if (this->player->getPosition().y < 60)
+			this->player->move(0.f, 1.f, dt);
+		else
+			this->player->move(0.f, -1.f, dt);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		this->player->move(0.f, 1.f, dt);
+		if (this->player->getPosition().y > 970)
+			this->player->move(0.f, -1.f, dt);
+		else
+			this->player->move(0.f, 1.f, dt);
 	}
 	
+	//MOVING ENEMY
+	posplayer = player->getPosition();
 	for (int i = 0; i < enemy_size; i++)
 	{
-		this->enemy[i]->move(1.f, 0.f, dt);
+		posenemy = enemy[i]->getPosition();
+		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
+		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
+		this->enemy[i]->setPosition(posenemy.x, posenemy.y);
 	}
-	
-
-	//MOVING ENEMY??
-	/*if (this->player->getPostision() > this->enemy->getPostision())
-	{
-
-	}
-	posplayer = player->getPostision();
-	posenemy = enemy->getPostision();
-	posplayer.x += 0.1 * (posplayer.x > posenemy.x) - 0.1 * (posplayer.x < posenemy.x);
-	posenemy.y += 0.1 * (posplayer.y > posenemy.y) - 0.1 * (posplayer.y < posenemy.y);
-	this->enemy->setPostision(posenemy.x, posenemy.y);*/
 }
 
 void GameStates::updatePauseMenuButtons()

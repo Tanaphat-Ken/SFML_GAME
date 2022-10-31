@@ -19,7 +19,7 @@ private:
     #define enemy_size 20
     HitboxComponent* hitboxComponent;
     //sf::Vector2f enemies;
-    //sf::Vector2f posenemy, posplayer;
+    sf::Vector2f posenemy, posplayer;
 
     //Functions
 

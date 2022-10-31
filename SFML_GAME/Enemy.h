@@ -7,7 +7,6 @@ class Enemy :
 	public Entity
 {
 private:
-	
 
 public:
 	Enemy(float x, float y, sf::Texture& texture_sheet);

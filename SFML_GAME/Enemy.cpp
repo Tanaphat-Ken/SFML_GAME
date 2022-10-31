@@ -2,7 +2,7 @@
 
 Enemy::Enemy(float x, float y, sf::Texture& texture_sheet)
 {
-	this->setPostision(x, y);
+	this->setPosition(x, y);
 	this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
 	this->createMovementComponent(200.f, 15.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
