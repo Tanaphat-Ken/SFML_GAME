@@ -14,6 +14,9 @@ protected:
 	std::stack<State*>* states;
 	sf::RenderWindow* window;
 	bool End;
+	bool Pause;
+	float keytime;
+	float keytimeMax;
 
 	sf::Vector2i mousePosScreen;
 	sf::Vector2i mousePosWindow;
@@ -27,10 +30,17 @@ public:
 	State(sf::RenderWindow* window, std::stack<State*>* states);
 	virtual ~State();
 
+	//Accessors
 	const bool& getEnd() const;
+	const bool& getKeytime();
+	
+	//Function
 	void endState();
+	void pauseState();
+	void unpauseState();
 
 	virtual void updateMousePos();
+	virtual void updateKeytime(const float& dt);
 	virtual void updateInput(const float& dt) = 0;
 	virtual void update(const float& dt) = 0;
 	virtual void render(sf::RenderTarget* target = NULL) = 0;

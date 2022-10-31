@@ -149,6 +149,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MovementComponents.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="State.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="HitboxComponent.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MovementComponents.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="State.h" />

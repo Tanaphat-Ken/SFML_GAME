@@ -104,7 +104,7 @@ void MainMenuState::update(const float& dt)
 
 }
 
-void MainMenuState::renderButtons(sf::RenderTarget* target)
+void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& it : this->buttons)
 	{
@@ -119,7 +119,7 @@ void MainMenuState::render(sf::RenderTarget* target)
 
 	target->draw(this->background);
 
-	this->renderButtons(target);
+	this->renderButtons(*target);
 
 	//remove later
 	//sf::Text mouseText;

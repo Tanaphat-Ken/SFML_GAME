@@ -40,8 +40,8 @@ public:
 	//accessor
 	const bool isPressed() const;
 	//functions
-	void update(sf::Vector2f mousePos);
-	void render(sf::RenderTarget* target);
+	void update(const sf::Vector2f& mousePos);
+	void render(sf::RenderTarget& target);
 };
 
 #endif

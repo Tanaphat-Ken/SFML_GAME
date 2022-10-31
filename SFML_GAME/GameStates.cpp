@@ -14,6 +14,14 @@ void GameStates::initBackground()
 
 }
 
+void GameStates::initFonts()
+{
+	if (!this->font.loadFromFile("Fonts/Superstar M54.ttf"))
+	{
+		throw("ERROR::MAINMENUSTATE::COULD NOT LOAD FONT");
+	}
+}
+
 void GameStates::initTextures()
 {
 	if (!this->textures["PLAYER_SHEET"].loadFromFile("Resources/Images/Sprites/Player/wizard.png"))
@@ -28,6 +36,13 @@ void GameStates::initTextures()
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_SWORD_TEXTURE";
 	}
+}
+
+void GameStates::initPauseMenu()
+{
+	this->pmenu = new PauseMenu(*this->window, this->font);
+	this->pmenu->addButton("RESUME", 300.f, "RESUME");
+	this->pmenu->addButton("QUIT", 500.f, "QUIT");
 }
 
 void GameStates::initEntity()
@@ -46,12 +61,15 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 	: State(window,states)
 {
 	this->initTextures();
+	this->initFonts();
 	this->initEntity();
+	this->initPauseMenu();
 	this->initBackground();
 }
 
 GameStates::~GameStates()
 {
+	delete this->pmenu;
 	delete this->player;
 	delete this->sword;
 	for (int i = 0; i < enemy_size; i++)
@@ -61,6 +79,23 @@ GameStates::~GameStates()
 }
 
 void GameStates::updateInput(const float& dt)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->getKeytime())
+	{
+		if (!this->Pause)
+		{
+			window->setMouseCursorVisible(true);
+			this->pauseState();
+		}
+		else
+		{
+			window->setMouseCursorVisible(false);
+			this->unpauseState();
+		}
+	}
+}
+
+void GameStates::updatePlayerInput(const float& dt)
 {
 	//update player input
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -79,12 +114,7 @@ void GameStates::updateInput(const float& dt)
 	{
 		this->player->move(0.f, 1.f, dt);
 	}
-	/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		this->sword->move(-10.f, 0.f, dt);
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		this->sword->move(10.f, 0.f, dt);*/
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-		this->endState();
+	
 	for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i]->move(1.f, 0.f, dt);
@@ -103,16 +133,39 @@ void GameStates::updateInput(const float& dt)
 	this->enemy->setPostision(posenemy.x, posenemy.y);*/
 }
 
+void GameStates::updatePauseMenuButtons()
+{
+	if (this->pmenu->isButtonPressed("RESUME"))
+	{
+		window->setMouseCursorVisible(false);
+		this->unpauseState();
+	}
+	if (this->pmenu->isButtonPressed("QUIT"))
+	{
+		window->setMouseCursorVisible(true);
+		this->endState();
+	}
+}
+
 void GameStates::update(const float& dt)
 {
 	this->updateMousePos();
+	this->updateKeytime(dt);
 	this->updateInput(dt);
-
-	this->player->update(dt);
-	this->sword->update(dt);
-	for (int i = 0; i < enemy_size; i++)
+	if(!this->Pause) //unpause
 	{
-		this->enemy[i]->update(dt);
+		this->updatePlayerInput(dt);
+		this->player->update(dt);
+		this->sword->update(dt);
+		for (int i = 0; i < enemy_size; i++)
+		{
+			this->enemy[i]->update(dt);
+		}
+	}
+	else //pause
+	{
+		this->pmenu->update(this->mousePosView);
+		this->updatePauseMenuButtons();
 	}
 	
 }
@@ -121,13 +174,16 @@ void GameStates::render(sf::RenderTarget* target)
 {
 	if (!target)
 		target = this->window;
-	this->renderTexture.clear();
 	target->draw(this->background);
-	this->player->render(this->renderTexture);
-	this->sword->render(target);
+	this->player->render(*target);
+	this->sword->render(*target);
 	for (int i = 0; i < enemy_size; i++)
 	{
-		this->enemy[i]->render(target);
+		this->enemy[i]->render(*target);
 	}
-	this->renderTexture.display();
+	if (this->Pause) //pauseMenu render
+	{
+		this->pmenu->render(*target);
+	}
 }
+

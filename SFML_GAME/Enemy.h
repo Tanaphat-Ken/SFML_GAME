@@ -15,6 +15,7 @@ public:
 
 	//Functions
 	virtual void update(const float& dt);
+	virtual void render(sf::RenderTarget& target);
 };
 
 #endif
