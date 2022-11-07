@@ -3,6 +3,7 @@
 
 #include "State.h"
 #include "PauseMenu.h"
+#include "EnemySystem.h"
 
 class GameStates :
     public State 
@@ -20,6 +21,8 @@ private:
     HitboxComponent* hitboxComponent;
     //sf::Vector2f enemies;
     sf::Vector2f posenemy, posplayer;
+    std::vector<Enemy*> activeEnemies;
+    EnemySystem* enemySystem;
 
     //Functions
 
@@ -27,7 +30,8 @@ private:
     void initFonts();
     void initTextures();
     void initPauseMenu();
-    void initEntity();
+    void initEntity(EnemySystem& enemySystem);
+    void initEnemySystem();
     
 
 public:
@@ -38,6 +42,7 @@ public:
     void updateInput(const float& dt);
     void updatePlayerInput(const float& dt);
     void updatePauseMenuButtons();
+    void updateCombat(Enemy* enemy, const int index, const float& dt);
     void update(const float& dt);
     void render(sf::RenderTarget* target = NULL);
 };

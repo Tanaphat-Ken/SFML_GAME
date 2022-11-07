@@ -28,7 +28,7 @@ void GameStates::initTextures()
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}
-	if (!this->textures["ENEMY_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/goblin.png"))
+	if (!this->textures["GOBLIN_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/goblin.png"))
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_GOBLIN_TEXTURE";
 	}
@@ -45,14 +45,20 @@ void GameStates::initPauseMenu()
 	this->pmenu->addButton("QUIT", 500.f, "QUIT");
 }
 
-void GameStates::initEntity()
+void GameStates::initEntity(EnemySystem& enemySystem)
 {
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
 	for (int i = 0; i < enemy_size; i++)
 	{
-		this->enemy[i] = new Enemy(rand() % 1920, rand() % 950, this->textures["ENEMY_SHEET"]);
+		this->enemy[i] = new Enemy(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"]);
 	}
+	enemySystem.createEnemy(GOBLIN, rand() % 1920, rand() % 950);
 	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
+}
+
+void GameStates::initEnemySystem()
+{
+	this->enemySystem = new EnemySystem(this->activeEnemies, this->textures, *this->player);
 }
 
 
@@ -62,9 +68,10 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 {
 	this->initTextures();
 	this->initFonts();
-	this->initEntity();
+	this->initEntity(*enemySystem);
 	this->initPauseMenu();
 	this->initBackground();
+	this->initEnemySystem();
 }
 
 GameStates::~GameStates()
@@ -72,9 +79,14 @@ GameStates::~GameStates()
 	delete this->pmenu;
 	delete this->player;
 	delete this->sword;
+	delete this->enemySystem;
 	for (int i = 0; i < enemy_size; i++)
 	{
 		delete this->enemy[i];
+	}
+	for (size_t i = 0; i < this->activeEnemies.size(); i++)
+	{
+		delete this->activeEnemies[i];
 	}
 }
 
@@ -152,6 +164,15 @@ void GameStates::updatePauseMenuButtons()
 	}
 }
 
+void GameStates::updateCombat(Enemy* enemy, const int index, const float& dt)
+{
+	if (enemy->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+	{
+		int dmg = 10;
+		//this->player->loseHP(dmg);
+	}
+}
+
 void GameStates::update(const float& dt)
 {
 	this->updateMousePos();
@@ -162,6 +183,12 @@ void GameStates::update(const float& dt)
 		this->updatePlayerInput(dt);
 		this->player->update(dt);
 		this->sword->update(dt);
+		unsigned index = 0;
+		for (auto* enemy : this->activeEnemies)
+		{
+			this->updateCombat(enemy, index, dt);
+			++index;
+		}
 		for (int i = 0; i < enemy_size; i++)
 		{
 			this->enemy[i]->update(dt);
@@ -182,6 +209,10 @@ void GameStates::render(sf::RenderTarget* target)
 	target->draw(this->background);
 	this->player->render(*target);
 	this->sword->render(*target);
+	for (auto* enemy : this->activeEnemies)
+	{
+		enemy->render(*target);
+	}
 	for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i]->render(*target);

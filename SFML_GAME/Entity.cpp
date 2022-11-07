@@ -49,6 +49,14 @@ const sf::Vector2f& Entity::getPosition() const
 	return this->sprite.getPosition();
 }
 
+const sf::FloatRect Entity::getGlobalBounds() const
+{
+	if (this->hitboxComponent)
+		return this->hitboxComponent->getGlobalBounds();
+
+	return this->sprite.getGlobalBounds();
+}
+
 //Functions
 void Entity::setPosition(const float x, const float y)
 {
