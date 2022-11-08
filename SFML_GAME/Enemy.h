@@ -9,10 +9,13 @@ class Enemy :
 private:
 
 public:
-	Enemy(float x, float y, sf::Texture& texture_sheet);
+	Enemy();
 	virtual ~Enemy();
 
 	//Functions
+	virtual void loseHP(const int hp);
+	virtual const bool isDead() const;
+
 	virtual void update(const float& dt);
 	virtual void render(sf::RenderTarget& target);
 };

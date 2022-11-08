@@ -1,12 +1,11 @@
 #ifndef ENEMYSYSTEM_H
 #define ENEMYSYSTEM_H
 
-#include "Entity.h"
-#include "State.h"
 #include "Goblin.h"
-//#include "Bird1.h"
 
-enum EnemyTypes { GOBLIN = 0, BIRD1 };
+//#include "SKELETON.h"
+
+enum EnemyTypes { GOBLIN = 0, SKELETON};
 
 class EnemySystem
 {
@@ -20,10 +19,6 @@ public:
 		std::map<std::string, sf::Texture>& textures, Entity& player);
 	virtual ~EnemySystem();
 
-	//Accessors
-
-	//Modifiers
-
 	//Functions
 	void createEnemy(const short type, const float xPos, const float yPos);
 	void removeEnemy(const int index);
@@ -32,5 +27,5 @@ public:
 	void render(sf::RenderTarget* target);
 };
 
-#endif //!ENEMYSYSTEM_H
+#endif
 

@@ -15,12 +15,12 @@ private:
     sf::RectangleShape background;
     sf::RenderTexture renderTexture;
     Player* player;
-    Enemy* enemy[20];
+    //Enemy* enemy[20];
     Sword* sword;
-    #define enemy_size 20
+    //#define enemy_size 20
     HitboxComponent* hitboxComponent;
-    //sf::Vector2f enemies;
     sf::Vector2f posenemy, posplayer;
+
     std::vector<Enemy*> activeEnemies;
     EnemySystem* enemySystem;
 

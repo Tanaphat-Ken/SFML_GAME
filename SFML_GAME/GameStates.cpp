@@ -48,10 +48,10 @@ void GameStates::initPauseMenu()
 void GameStates::initEntity(EnemySystem& enemySystem)
 {
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
-	for (int i = 0; i < enemy_size; i++)
+	/*for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i] = new Enemy(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"]);
-	}
+	}*/
 	enemySystem.createEnemy(GOBLIN, rand() % 1920, rand() % 950);
 	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
 }
@@ -80,10 +80,10 @@ GameStates::~GameStates()
 	delete this->player;
 	delete this->sword;
 	delete this->enemySystem;
-	for (int i = 0; i < enemy_size; i++)
+	/*for (int i = 0; i < enemy_size; i++)
 	{
 		delete this->enemy[i];
-	}
+	}*/
 	for (size_t i = 0; i < this->activeEnemies.size(); i++)
 	{
 		delete this->activeEnemies[i];
@@ -141,13 +141,22 @@ void GameStates::updatePlayerInput(const float& dt)
 	
 	//MOVING ENEMY
 	posplayer = player->getPosition();
-	for (int i = 0; i < enemy_size; i++)
+	/*for (int i = 0; i < enemy_size; i++)
 	{
 		posenemy = enemy[i]->getPosition();
 		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
 		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
 		this->enemy[i]->setPosition(posenemy.x, posenemy.y);
+	}*/
+
+	for (size_t i = 0; i < this->activeEnemies.size(); i++)
+	{
+		posenemy = this->activeEnemies.at(i)->getPosition();
+		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
+		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
+		this->activeEnemies.at(i)->setPosition(posenemy.x, posenemy.y);
 	}
+
 }
 
 void GameStates::updatePauseMenuButtons()
@@ -186,13 +195,21 @@ void GameStates::update(const float& dt)
 		unsigned index = 0;
 		for (auto* enemy : this->activeEnemies)
 		{
+			enemy->update(dt);
 			this->updateCombat(enemy, index, dt);
 			++index;
+
+			if (enemy->isDead())
+			{
+				this->enemySystem->removeEnemy(index);
+				continue;
+			}
 		}
-		for (int i = 0; i < enemy_size; i++)
+
+		/*for (int i = 0; i < enemy_size; i++)
 		{
 			this->enemy[i]->update(dt);
-		}
+		}*/
 	}
 	else //pause
 	{
@@ -213,10 +230,10 @@ void GameStates::render(sf::RenderTarget* target)
 	{
 		enemy->render(*target);
 	}
-	for (int i = 0; i < enemy_size; i++)
+	/*for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i]->render(*target);
-	}
+	}*/
 	if (this->Pause) //pauseMenu render
 	{
 		this->pmenu->render(*target);

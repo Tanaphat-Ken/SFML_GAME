@@ -2,10 +2,9 @@
 #define GOBLIN_H
 
 #include "Enemy.h"
-#include "Entity.h"
 
 class Goblin :
-	public Entity
+	public Enemy
 {
 private:
 	void initVariables();
@@ -23,7 +22,7 @@ public:
 	void updateAnimation(const float& dt);
 	void update(const float& dt);
 
-	void render(sf::RenderTarget& target, sf::Shader* shader, const sf::Vector2f light_position, const bool show_hitbox);
+	void render(sf::RenderTarget& target);
 };
 
 #endif
