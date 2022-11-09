@@ -8,7 +8,6 @@ EnemySystem::EnemySystem(std::vector<Enemy*>& activeEnemies,
 
 EnemySystem::~EnemySystem()
 {
-
 }
 
 void EnemySystem::createEnemy(const short type, const float xPos, const float yPos)
@@ -16,7 +15,7 @@ void EnemySystem::createEnemy(const short type, const float xPos, const float yP
 	switch (type)
 	{
 	case EnemyTypes::GOBLIN:
-		this->activeEnemies.push_back(new Goblin(xPos, yPos, this->textures["GOBLIN_SHEET"], this->player));
+		//this->activeEnemies.push_back(new Goblin(xPos, yPos, this->textures["GOBLIN_SHEET"], this->player));
 		break;
 	/*case EnemyTypes::BIRD1:
 		this->activeEnemies.push_back(new SKELETON(xPos, yPos, this->textures["SKELETON_SHEET"], enemy_spawner_tile, this->player));

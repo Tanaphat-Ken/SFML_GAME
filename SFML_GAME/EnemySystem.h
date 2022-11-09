@@ -2,10 +2,9 @@
 #define ENEMYSYSTEM_H
 
 #include "Goblin.h"
-
 //#include "SKELETON.h"
 
-enum EnemyTypes { GOBLIN = 0, SKELETON};
+enum EnemyTypes {GOBLIN = 0, SKELETON};
 
 class EnemySystem
 {

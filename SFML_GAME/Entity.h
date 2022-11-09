@@ -23,6 +23,7 @@ public:
 	Entity();
 	virtual ~Entity();
 
+	
 	//component functions
 	void setTexture(sf::Texture& texture);
 	void createHitboxComponent(sf::Sprite& sprite,
