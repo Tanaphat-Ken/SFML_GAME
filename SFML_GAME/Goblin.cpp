@@ -29,10 +29,10 @@ Goblin::Goblin(float x, float y, sf::Texture& texture_sheet, Entity& player)
 	this->initVariables();
 	//this->initGUI();
 
-	this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
+	//this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
 	this->createMovementComponent(200.f, 15.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
-	this->createAttributeComponent();
+	//this->createAttributeComponent();
 
 	this->setPosition(x, y);
 	this->initAnimations();
@@ -63,13 +63,13 @@ void Goblin::update(const float& dt)
 
 	this->updateAnimation(dt);
 
-	this->hitboxComponent->update();
+	//this->hitboxComponent->update();
 	//this->follow->update(dt);
 }
 
 void Goblin::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
-	this->hitboxComponent->render(target);
+	//this->hitboxComponent->render(target);
 	//target.draw(this->hpBar);
 }

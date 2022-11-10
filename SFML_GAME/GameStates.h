@@ -25,6 +25,7 @@ private:
 
     //Attribute
     int playerHP = 10;
+    int score = 0;
 
     //Functions
 
@@ -32,7 +33,7 @@ private:
     void initFonts();
     void initTextures();
     void initPauseMenu();
-    void initEntity(EnemySystem& enemySystem);
+    void initEntity(/*EnemySystem& enemySystem*/);
     void initEnemySystem();
     
 
@@ -44,7 +45,10 @@ public:
     void updateInput(const float& dt);
     void updatePlayerInput(const float& dt);
     void updatePauseMenuButtons();
+
+    //NOT USING
     void updateCombat(Enemy* enemy, const int index, const float& dt);
+
     void update(const float& dt);
     void render(sf::RenderTarget* target = NULL);
 };

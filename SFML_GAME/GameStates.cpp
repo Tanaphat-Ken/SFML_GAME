@@ -11,7 +11,7 @@ void GameStates::initBackground()
 		throw"ERROR::GAMESTATES::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
 	}
 	this->background.setTexture(&this->backgroundTexture);
-
+	
 }
 
 void GameStates::initFonts()
@@ -45,14 +45,14 @@ void GameStates::initPauseMenu()
 	this->pmenu->addButton("QUIT", 500.f, "QUIT");
 }
 
-void GameStates::initEntity(EnemySystem& enemySystem)
+void GameStates::initEntity(/*EnemySystem& enemySystem*/)
 {
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
 	/*for (int i = 0; i < enemy_size; i++)
 	{
 		this->enemy[i] = new Enemy(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"]);
 	}*/
-	enemySystem.createEnemy(GOBLIN, rand() % 1920, rand() % 950);
+	//enemySystem.createEnemy(GOBLIN, rand() % 1920, rand() % 950);
 	for (int i = 0; i < goblin_size; i++)
 	{
 		this->goblin[i] = new Goblin(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"], *this->player);
@@ -72,7 +72,7 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 {
 	this->initTextures();
 	this->initFonts();
-	this->initEntity(*this->enemySystem);
+	this->initEntity(/**this->enemySystem*/);
 	this->initPauseMenu();
 	this->initBackground();
 	this->initEnemySystem();
@@ -88,10 +88,10 @@ GameStates::~GameStates()
 	{
 		delete this->goblin[i];
 	}
-	for (size_t i = 0; i < this->activeEnemies.size(); i++)
+	/*for (size_t i = 0; i < this->activeEnemies.size(); i++)
 	{
 		delete this->activeEnemies[i];
-	}
+	}*/
 }
 
 void GameStates::updateInput(const float& dt)
@@ -144,22 +144,15 @@ void GameStates::updatePlayerInput(const float& dt)
 	}
 	
 	//MOVING ENEMY
-	posplayer = player->getPosition();
-	/*for (int i = 0; i < enemy_size; i++)
-	{
-		posenemy = enemy[i]->getPosition();
-		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
-		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
-		this->enemy[i]->setPosition(posenemy.x, posenemy.y);
-	}*/
-
-	for (size_t i = 0; i < this->activeEnemies.size(); i++)
+	
+	/*for (size_t i = 0; i < this->activeEnemies.size(); i++)
 	{
 		posenemy = this->activeEnemies.at(i)->getPosition();
 		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
 		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
 		this->activeEnemies.at(i)->setPosition(posenemy.x, posenemy.y);
-	}
+	}*/
+	posplayer = player->getPosition();
 	for (int i = 0; i < goblin_size; i++)
 	{
 		posenemy = this->goblin[i]->getPosition();
@@ -182,6 +175,8 @@ void GameStates::updatePauseMenuButtons()
 		this->endState();
 	}
 }
+
+//NOT USING
 
 void GameStates::updateCombat(Enemy* enemy, const int index, const float& dt)
 {
@@ -209,7 +204,7 @@ void GameStates::update(const float& dt)
 			if (this->goblin[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 			{
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
-				--playerHP;
+				playerHP--;
 				if (playerHP == 0)
 				{
 					this->endState();
@@ -218,9 +213,14 @@ void GameStates::update(const float& dt)
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 			{
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
+				score++; 
+				if (score == 10)
+				{
+					this->endState();
+				}
 			}
 		}
-		unsigned index = 0;
+		/*unsigned index = 0;
 		for (auto* enemy : this->activeEnemies)
 		{
 			enemy->update(dt);
@@ -231,7 +231,7 @@ void GameStates::update(const float& dt)
 				this->enemySystem->removeEnemy(index);
 				continue;
 			}
-		}
+		}*/
 	}
 	else //pause
 	{
@@ -252,13 +252,9 @@ void GameStates::render(sf::RenderTarget* target)
 	{
 		this->goblin[i]->render(*target);
 	}
-	for (auto* enemy : this->activeEnemies)
+	/*for (auto* enemy : this->activeEnemies)
 	{
 		enemy->render(*target);
-	}
-	/*for (int i = 0; i < enemy_size; i++)
-	{
-		this->enemy[i]->render(*target);
 	}*/
 	if (this->Pause) //pauseMenu render
 	{

@@ -4,7 +4,7 @@ Sword::Sword(sf::RenderWindow* window, float x, float y, sf::Texture& texture_sh
 {
 	this->window = window;
 	this->setPosition(mousePosWindow.x, mousePosWindow.y);
-	this->createHitboxComponent(this->sprite, 0.f, 0.f, 18.f, 34.f);
+	//this->createHitboxComponent(this->sprite, 0.f, 0.f, 18.f, 34.f);
 	this->createAnimationComponent(texture_sheet);
 	this->animationComponent->addAnimation("IDLE", 10.f, 0, 0, 0, 0, 6, 13);
 }
@@ -23,7 +23,7 @@ void Sword::updateMousePos()
 
 void Sword::update(const float& dt)
 {
-	this->hitboxComponent->update();
+	//this->hitboxComponent->update();
 	this->updateMousePos();
 	this->setPosition(mousePosWindow.x - 10, mousePosWindow.y - 15);
 	this->animationComponent->play("IDLE", dt);
@@ -32,5 +32,5 @@ void Sword::update(const float& dt)
 void Sword::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
-	this->hitboxComponent->render(target);
+	//this->hitboxComponent->render(target);
 }
