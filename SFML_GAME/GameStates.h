@@ -16,15 +16,15 @@ private:
     sf::RenderTexture renderTexture;
     Player* player;
     Sword* sword;
-    #define goblin_size 30
+    #define goblin_size 20
     HitboxComponent* hitboxComponent;
     sf::Vector2f posenemy, posplayer;
     std::vector<Enemy*> activeEnemies;
     EnemySystem* enemySystem;
-    Goblin* goblin[30];
+    Goblin* goblin[20];
 
     //Attribute
-    int playerHP = 10;
+    int playerHP = 100;
     int score = 0;
 
     //Functions

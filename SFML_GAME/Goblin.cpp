@@ -8,7 +8,8 @@ void Goblin::initVariables()
 
 void Goblin::initAnimations()
 {
-	this->animationComponent->addAnimation("IDLE_RIGHT", 10.f, 0, 0, 3, 0, 18, 30);
+	this->animationComponent->addAnimation("IDLE_LEFT", 10.f, 0, 0, 3, 0, 18, 30);
+	this->animationComponent->addAnimation("IDLE_RIGHT", 10.f, 4, 0, 7, 0, 18, 30);
 }
 
 void Goblin::initAI()
@@ -29,8 +30,8 @@ Goblin::Goblin(float x, float y, sf::Texture& texture_sheet, Entity& player)
 	this->initVariables();
 	//this->initGUI();
 
-	//this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
-	this->createMovementComponent(200.f, 15.f, 5.f);
+	this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
+	this->createMovementComponent(100.f, 10.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
 	//this->createAttributeComponent();
 
@@ -48,10 +49,36 @@ Goblin::~Goblin()
 
 void Goblin::updateAnimation(const float& dt)
 {
+	if (this->movementComponents->getState(MOVING))
+	{
+		if (this->movementComponents->getState(MOVING_LEFT))
+		{
+			Move = 1;
+		}
+		else if (this->movementComponents->getState(MOVING_RIGHT))
+		{
+			Move = 0;
+		}
+	}
 	if (this->movementComponents->getState(IDLE))
+	{
+		if (Move == 1)
+			this->animationComponent->play("IDLE_LEFT", dt);
+		if (Move == 0)
+			this->animationComponent->play("IDLE_RIGHT", dt);
+
+	}
+	else if (this->movementComponents->getState(MOVING_RIGHT))
 		this->animationComponent->play("IDLE_RIGHT", dt);
-	else if (this->movementComponents->getState(MOVING_RIGHT) || this->movementComponents->getState(MOVING_DOWN))
-		this->animationComponent->play("IDLE_RIGHT", dt);
+	else if (this->movementComponents->getState(MOVING_LEFT))
+		this->animationComponent->play("IDLE_LEFT", dt);
+	else if (this->movementComponents->getState(MOVING_UP) || this->movementComponents->getState(MOVING_DOWN))
+	{
+		if (Move == 1)
+			this->animationComponent->play("IDLE_LEFT", dt);
+		if (Move == 0)
+			this->animationComponent->play("IDLE_RIGHT", dt);
+	}
 	else
 		this->sprite.setColor(sf::Color::White);
 }
@@ -63,13 +90,15 @@ void Goblin::update(const float& dt)
 
 	this->updateAnimation(dt);
 
-	//this->hitboxComponent->update();
+	this->hitboxComponent->update();
+
 	//this->follow->update(dt);
 }
 
 void Goblin::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
-	//this->hitboxComponent->render(target);
+	this->hitboxComponent->render(target);
+
 	//target.draw(this->hpBar);
 }

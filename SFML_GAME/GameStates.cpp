@@ -156,9 +156,30 @@ void GameStates::updatePlayerInput(const float& dt)
 	for (int i = 0; i < goblin_size; i++)
 	{
 		posenemy = this->goblin[i]->getPosition();
-		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
-		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
-		this->goblin[i]->setPosition(posenemy.x, posenemy.y);
+		//posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
+		//posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
+		//this->goblin[i]->setPosition(posenemy.x, posenemy.y);
+		if (posenemy.x > posplayer.x)
+		{
+			this->goblin[i]->move(-1.f, 0.f, dt);
+			if (posenemy.y > posplayer.y)
+				this->goblin[i]->move(0.f, -1.f, dt);
+			else if (posenemy.y < posplayer.y)
+				this->goblin[i]->move(0.f, 1.f, dt);
+		}
+		else if (posenemy.x < posplayer.x)
+		{
+			this->goblin[i]->move(1.f, 0.f, dt);
+			if (posenemy.y > posplayer.y)
+				this->goblin[i]->move(0.f, -1.f, dt);
+			else if (posenemy.y < posplayer.y)
+				this->goblin[i]->move(0.f, 1.f, dt);
+		}
+		else if (posenemy.y < posplayer.y)
+			this->goblin[i]->move(0.f, 1.f, dt);
+		else if (posenemy.y > posplayer.y)
+			this->goblin[i]->move(0.f, -1.f, dt);
+
 	}
 }
 
@@ -213,11 +234,7 @@ void GameStates::update(const float& dt)
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 			{
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
-				score++; 
-				if (score == 10)
-				{
-					this->endState();
-				}
+				score++;
 			}
 		}
 		/*unsigned index = 0;

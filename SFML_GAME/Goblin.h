@@ -7,6 +7,8 @@ class Goblin :
 	public Enemy
 {
 private:
+	int Move = 0;
+
 	void initVariables();
 	void initAnimations();
 	void initAI();
