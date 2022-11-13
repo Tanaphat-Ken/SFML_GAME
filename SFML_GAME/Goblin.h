@@ -1,20 +1,16 @@
 #ifndef GOBLIN_H
 #define GOBLIN_H
 
-#include "Enemy.h"
+#include "Entity.h"
 
 class Goblin :
-	public Enemy
+	public Entity
 {
 private:
 	int Move = 0;
 
 	void initVariables();
 	void initAnimations();
-	void initAI();
-	//void initGUI();
-
-	//sf::RectangleShape hpBar;
 
 public:
 	Goblin(float x, float y, sf::Texture& texture_sheet,Entity& player);

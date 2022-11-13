@@ -45,24 +45,14 @@ void GameStates::initPauseMenu()
 	this->pmenu->addButton("QUIT", 500.f, "QUIT");
 }
 
-void GameStates::initEntity(/*EnemySystem& enemySystem*/)
+void GameStates::initEntity()
 {
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
-	/*for (int i = 0; i < enemy_size; i++)
-	{
-		this->enemy[i] = new Enemy(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"]);
-	}*/
-	//enemySystem.createEnemy(GOBLIN, rand() % 1920, rand() % 950);
 	for (int i = 0; i < goblin_size; i++)
 	{
 		this->goblin[i] = new Goblin(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"], *this->player);
 	}
 	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
-}
-
-void GameStates::initEnemySystem()
-{
-	this->enemySystem = new EnemySystem(this->activeEnemies, this->textures, *this->player);
 }
 
 
@@ -72,10 +62,9 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 {
 	this->initTextures();
 	this->initFonts();
-	this->initEntity(/**this->enemySystem*/);
+	this->initEntity();
 	this->initPauseMenu();
 	this->initBackground();
-	this->initEnemySystem();
 }
 
 GameStates::~GameStates()
@@ -83,15 +72,10 @@ GameStates::~GameStates()
 	delete this->pmenu;
 	delete this->player;
 	delete this->sword;
-	delete this->enemySystem;
 	for (int i = 0; i < goblin_size; i++)
 	{
 		delete this->goblin[i];
 	}
-	/*for (size_t i = 0; i < this->activeEnemies.size(); i++)
-	{
-		delete this->activeEnemies[i];
-	}*/
 }
 
 void GameStates::updateInput(const float& dt)
@@ -142,23 +126,12 @@ void GameStates::updatePlayerInput(const float& dt)
 		else
 			this->player->move(0.f, 1.f, dt);
 	}
-	
+
 	//MOVING ENEMY
-	
-	/*for (size_t i = 0; i < this->activeEnemies.size(); i++)
-	{
-		posenemy = this->activeEnemies.at(i)->getPosition();
-		posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
-		posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
-		this->activeEnemies.at(i)->setPosition(posenemy.x, posenemy.y);
-	}*/
 	posplayer = player->getPosition();
 	for (int i = 0; i < goblin_size; i++)
 	{
 		posenemy = this->goblin[i]->getPosition();
-		//posenemy.x += 0.3f * (posplayer.x > posenemy.x) - 0.3f * (posplayer.x < posenemy.x);
-		//posenemy.y += 0.3f * (posplayer.y > posenemy.y) - 0.3f * (posplayer.y < posenemy.y);
-		//this->goblin[i]->setPosition(posenemy.x, posenemy.y);
 		if (posenemy.x > posplayer.x)
 		{
 			this->goblin[i]->move(-1.f, 0.f, dt);
@@ -197,17 +170,6 @@ void GameStates::updatePauseMenuButtons()
 	}
 }
 
-//NOT USING
-
-void GameStates::updateCombat(Enemy* enemy, const int index, const float& dt)
-{
-	if (enemy->getGlobalBounds().intersects(this->player->getGlobalBounds()))
-	{
-		int dmg = 10;
-		//this->player->loseHP(dmg);
-	}
-}
-
 void GameStates::update(const float& dt)
 {
 	this->updateMousePos();
@@ -237,18 +199,6 @@ void GameStates::update(const float& dt)
 				score++;
 			}
 		}
-		/*unsigned index = 0;
-		for (auto* enemy : this->activeEnemies)
-		{
-			enemy->update(dt);
-			this->updateCombat(enemy, index, dt);
-			++index;
-			if (enemy->isDead())
-			{
-				this->enemySystem->removeEnemy(index);
-				continue;
-			}
-		}*/
 	}
 	else //pause
 	{
@@ -265,14 +215,11 @@ void GameStates::render(sf::RenderTarget* target)
 	target->draw(this->background);
 	this->player->render(*target);
 	this->sword->render(*target);
+
 	for (int i = 0; i < goblin_size; i++)
 	{
 		this->goblin[i]->render(*target);
 	}
-	/*for (auto* enemy : this->activeEnemies)
-	{
-		enemy->render(*target);
-	}*/
 	if (this->Pause) //pauseMenu render
 	{
 		this->pmenu->render(*target);

@@ -8,10 +8,6 @@ class Player :
 {
 private:
 	//Variables
-
-	//Init Functions
-	void initVariables();
-	void initComponents();
 	int Move = 0;
 
 public:

@@ -2,7 +2,7 @@
 #define STATE_H
 
 #include "Player.h"
-#include "Enemy.h"
+#include "Goblin.h"
 #include "Sword.h"
 
 

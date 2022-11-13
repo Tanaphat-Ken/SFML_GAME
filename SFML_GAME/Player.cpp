@@ -1,19 +1,8 @@
 #include "Player.h"
-//init functions
-void Player::initVariables()
-{
-
-}
-
-void Player::initComponents()
-{
-
-}
 
 //CON / DES
 Player::Player(float x,float y,sf::Texture& texture_sheet)
 {
-	//this->initVariables();
 	this->createHitboxComponent(this->sprite, 7.f, 30.f, 38.f, 60.f);
 	this->setPosition(x, y);
 	this->createMovementComponent(300.f, 15.f, 5.f);
@@ -67,6 +56,8 @@ void Player::update(const float& dt)
 		if (Move == 0)
 			this->animationComponent->play("WALK_RIGHT", dt);
 	}
+	else
+		this->sprite.setColor(sf::Color::White);
 
 }
 

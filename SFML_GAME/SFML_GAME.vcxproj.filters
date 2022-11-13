@@ -60,9 +60,6 @@
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Sword.cpp">
       <Filter>Item</Filter>
     </ClCompile>
@@ -75,14 +72,8 @@
     <ClCompile Include="PauseMenu.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySystem.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Goblin.cpp">
       <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="AttributeComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +104,6 @@
     <ClInclude Include="AnimationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Sword.h">
       <Filter>Item</Filter>
     </ClInclude>
@@ -128,14 +116,8 @@
     <ClInclude Include="PauseMenu.h">
       <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySystem.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Goblin.h">
       <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="AttributeComponent.h">
-      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

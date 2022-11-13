@@ -3,7 +3,7 @@
 
 #include "State.h"
 #include "PauseMenu.h"
-#include "EnemySystem.h"
+#include "Entity.h"
 
 class GameStates :
     public State 
@@ -14,14 +14,13 @@ private:
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::RenderTexture renderTexture;
+    #define goblin_size 20
     Player* player;
     Sword* sword;
-    #define goblin_size 20
+    Goblin* goblin[20];
     HitboxComponent* hitboxComponent;
     sf::Vector2f posenemy, posplayer;
-    std::vector<Enemy*> activeEnemies;
-    EnemySystem* enemySystem;
-    Goblin* goblin[20];
+    
 
     //Attribute
     int playerHP = 100;
@@ -33,8 +32,7 @@ private:
     void initFonts();
     void initTextures();
     void initPauseMenu();
-    void initEntity(/*EnemySystem& enemySystem*/);
-    void initEnemySystem();
+    void initEntity();
     
 
 public:
@@ -45,9 +43,6 @@ public:
     void updateInput(const float& dt);
     void updatePlayerInput(const float& dt);
     void updatePauseMenuButtons();
-
-    //NOT USING
-    void updateCombat(Enemy* enemy, const int index, const float& dt);
 
     void update(const float& dt);
     void render(sf::RenderTarget* target = NULL);

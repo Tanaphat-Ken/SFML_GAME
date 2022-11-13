@@ -4,7 +4,6 @@
 #include "MovementComponents.h"
 #include "AnimationComponent.h"
 #include "HitboxComponent.h"
-#include "AttributeComponent.h"
 
 class Entity
 {
@@ -17,7 +16,6 @@ protected:
 	HitboxComponent* hitboxComponent;
 	MovementComponents* movementComponents;
 	AnimationComponent* animationComponent;
-	AttributeComponent* attributeComponent;
 
 public:
 	Entity();
@@ -31,7 +29,6 @@ public:
 		float width, float height);
 	void createMovementComponent(const float maxVelocity, const float acceleration, const float deceleration);
 	void createAnimationComponent(sf::Texture& texture_sheet);
-	void createAttributeComponent();
 
 	//Functions
 	virtual const sf::Vector2f& getPosition() const;
