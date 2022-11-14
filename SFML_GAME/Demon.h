@@ -1,9 +1,9 @@
-#ifndef GOBLIN_H
-#define GOBLIN_H
+#ifndef DEMON_H
+#define DEMON_H
 
 #include "Entity.h"
 
-class Goblin :
+class Demon :
 	public Entity
 {
 private:
@@ -13,8 +13,8 @@ private:
 	void initAnimations();
 
 public:
-	Goblin(float x, float y, sf::Texture& texture_sheet);
-	virtual ~Goblin();
+	Demon(float x, float y, sf::Texture& texture_sheet);
+	virtual ~Demon();
 
 	//Functions
 	void updateAnimation(const float& dt);
@@ -24,4 +24,3 @@ public:
 };
 
 #endif
-

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Goblin.h"
 #include "Sword.h"
+#include "Demon.h"
 
 
 class State

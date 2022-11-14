@@ -28,13 +28,17 @@ void GameStates::initTextures()
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_PLAYER_TEXTURE";
 	}
-	if (!this->textures["GOBLIN_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/goblin.png"))
+	if (!this->textures["GOBLIN_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/Goblin/goblin.png"))
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_GOBLIN_TEXTURE";
 	}
 	if (!this->textures["SWORD"].loadFromFile("Resources/Images/Sprites/Player/sword2.png"))
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_SWORD_TEXTURE";
+	}
+	if (!this->textures["DEMON_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/Demon/Demon.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_DEMON_TEXTURE";
 	}
 }
 
@@ -50,9 +54,10 @@ void GameStates::initEntity()
 	this->player = new Player(880, 480, this->textures["PLAYER_SHEET"]);
 	for (int i = 0; i < goblin_size; i++)
 	{
-		this->goblin[i] = new Goblin(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"], *this->player);
+		this->goblin[i] = new Goblin(rand() % 1920, rand() % 950, this->textures["GOBLIN_SHEET"]);
 	}
 	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
+	this->demon = new Demon(rand() % 1920, rand() % 950, this->textures["DEMON_SHEET"]);
 }
 
 
@@ -72,6 +77,7 @@ GameStates::~GameStates()
 	delete this->pmenu;
 	delete this->player;
 	delete this->sword;
+	delete this->demon;
 	for (int i = 0; i < goblin_size; i++)
 	{
 		delete this->goblin[i];
@@ -152,7 +158,30 @@ void GameStates::updatePlayerInput(const float& dt)
 			this->goblin[i]->move(0.f, 1.f, dt);
 		else if (posenemy.y > posplayer.y)
 			this->goblin[i]->move(0.f, -1.f, dt);
-
+	}
+	if (Clock.getElapsedTime().asSeconds() > 10)
+	{
+		posenemy = this->demon->getPosition();
+		if (posenemy.x > posplayer.x)
+		{
+			this->demon->move(-1.f, 0.f, dt);
+			if (posenemy.y > posplayer.y)
+				this->demon->move(0.f, -1.f, dt);
+			else if (posenemy.y < posplayer.y)
+				this->demon->move(0.f, 1.f, dt);
+		}
+		else if (posenemy.x < posplayer.x)
+		{
+			this->demon->move(1.f, 0.f, dt);
+			if (posenemy.y > posplayer.y)
+				this->demon->move(0.f, -1.f, dt);
+			else if (posenemy.y < posplayer.y)
+				this->demon->move(0.f, 1.f, dt);
+		}
+		else if (posenemy.y < posplayer.y)
+			this->demon->move(0.f, 1.f, dt);
+		else if (posenemy.y > posplayer.y)
+			this->demon->move(0.f, -1.f, dt);
 	}
 }
 
@@ -167,6 +196,7 @@ void GameStates::updatePauseMenuButtons()
 	{
 		window->setMouseCursorVisible(true);
 		this->endState();
+		Clock.restart();
 	}
 }
 
@@ -178,9 +208,17 @@ void GameStates::update(const float& dt)
 
 	if(!this->Pause) //unpause
 	{
+		float Time = Clock.getElapsedTime().asSeconds();
+		std::cout << Time << std::endl;
 		this->updatePlayerInput(dt);
 		this->player->update(dt);
 		this->sword->update(dt);
+		this->demon->update(dt);
+		if (this->demon->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+		{
+			this->endState();
+			Clock.restart();
+		}
 		for (int i = 0; i < goblin_size; i++)
 		{
 			this->goblin[i]->update(dt);
@@ -191,6 +229,7 @@ void GameStates::update(const float& dt)
 				if (playerHP == 0)
 				{
 					this->endState();
+					Clock.restart();
 				}
 			}
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
@@ -215,6 +254,7 @@ void GameStates::render(sf::RenderTarget* target)
 	target->draw(this->background);
 	this->player->render(*target);
 	this->sword->render(*target);
+	this->demon->render(*target);
 
 	for (int i = 0; i < goblin_size; i++)
 	{

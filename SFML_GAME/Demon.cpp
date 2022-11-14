@@ -1,24 +1,24 @@
-#include "Goblin.h"
+#include "Demon.h"
 
 //Initializer functions
-void Goblin::initVariables()
+void Demon::initVariables()
 {
 
 }
 
-void Goblin::initAnimations()
+void Demon::initAnimations()
 {
-	this->animationComponent->addAnimation("IDLE_LEFT", 10.f, 0, 0, 3, 0, 18, 30);
-	this->animationComponent->addAnimation("IDLE_RIGHT", 10.f, 4, 0, 7, 0, 18, 30);
+	this->animationComponent->addAnimation("IDLE_LEFT", 10.f, 0, 0, 3, 0, 34, 38);
+	this->animationComponent->addAnimation("IDLE_RIGHT", 10.f, 4, 0, 7, 0, 34, 38);
 }
 
 //Constructors / Destructors
-Goblin::Goblin(float x, float y, sf::Texture& texture_sheet)
+Demon::Demon(float x, float y, sf::Texture& texture_sheet)
 {
 	this->initVariables();
 
 	this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
-	this->createMovementComponent(100.f, 10.f, 0.1f);
+	this->createMovementComponent(125.f, 10.f, 0.1f);
 	this->createAnimationComponent(texture_sheet);
 
 	this->setPosition(x, y);
@@ -27,11 +27,11 @@ Goblin::Goblin(float x, float y, sf::Texture& texture_sheet)
 }
 
 
-Goblin::~Goblin()
+Demon::~Demon()
 {
 }
 
-void Goblin::updateAnimation(const float& dt)
+void Demon::updateAnimation(const float& dt)
 {
 	if (this->movementComponents->getState(MOVING))
 	{
@@ -52,7 +52,7 @@ void Goblin::updateAnimation(const float& dt)
 		this->sprite.setColor(sf::Color::White);
 }
 
-void Goblin::update(const float& dt)
+void Demon::update(const float& dt)
 {
 
 	this->movementComponents->update(dt);
@@ -63,7 +63,7 @@ void Goblin::update(const float& dt)
 
 }
 
-void Goblin::render(sf::RenderTarget& target)
+void Demon::render(sf::RenderTarget& target)
 {
 	target.draw(this->sprite);
 	this->hitboxComponent->render(target);

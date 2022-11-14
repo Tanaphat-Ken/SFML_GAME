@@ -75,6 +75,9 @@
     <ClCompile Include="Goblin.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Demon.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -117,6 +120,9 @@
       <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Goblin.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Demon.h">
       <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
