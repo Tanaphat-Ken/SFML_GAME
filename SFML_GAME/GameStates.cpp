@@ -210,6 +210,9 @@ void GameStates::update(const float& dt)
 	{
 		float Time = Clock.getElapsedTime().asSeconds();
 		std::cout << Time << std::endl;
+		std::cout << playerHP << std::endl;
+		std::cout << score << std::endl;
+		std::cout << std::endl;
 		this->updatePlayerInput(dt);
 		this->player->update(dt);
 		this->sword->update(dt);
@@ -236,6 +239,12 @@ void GameStates::update(const float& dt)
 			{
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
 				score++;
+				int drop_from_goblin = rand() % 100;
+				if (drop_from_goblin >= 90)
+					if (playerHP == 30)
+						continue;
+					else
+						playerHP++;
 			}
 		}
 	}
