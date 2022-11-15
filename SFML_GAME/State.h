@@ -5,6 +5,9 @@
 #include "Goblin.h"
 #include "Sword.h"
 #include "Demon.h"
+#include "Skeleton.h"
+#include "Zombie.h"
+#include "Imp.h"
 
 
 class State

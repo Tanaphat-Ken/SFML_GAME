@@ -18,10 +18,13 @@ private:
     #define goblin_size 20 //0 sec
     #define skeleton_size 10 //45 sec
     #define imp_size 3 //85 sec
+    #define zombie_size 2 //150 sec
     Player* player;
     Sword* sword;
     Goblin* goblin[20];
-    //Zombie* zombie[2] //150 sec
+    Skeleton* skeleton[10];
+    Imp* imp[3];
+    Zombie* zombie[2]; //150 sec
     Demon* demon; //10 sec
     HitboxComponent* hitboxComponent;
     sf::Vector2f posenemy, posplayer;

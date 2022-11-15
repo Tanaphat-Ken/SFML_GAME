@@ -28,6 +28,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{e916c2b6-9086-492f-849f-b0b514ecb730}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Enemy">
+      <UniqueIdentifier>{8cd9c27d-cba8-4fca-95d8-12b677ee1eb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,11 +75,20 @@
     <ClCompile Include="PauseMenu.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="Goblin.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
     <ClCompile Include="Demon.cpp">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Goblin.cpp">
+      <Filter>Entities\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Imp.cpp">
+      <Filter>Entities\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Entities\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Entities\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,9 +106,6 @@
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Entities</Filter>
@@ -119,11 +128,23 @@
     <ClInclude Include="PauseMenu.h">
       <Filter>GUI</Filter>
     </ClInclude>
+    <ClInclude Include="Demon.h">
+      <Filter>Entities\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="Goblin.h">
+      <Filter>Entities\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Imp.h">
+      <Filter>Entities\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Demon.h">
-      <Filter>Entities</Filter>
+    <ClInclude Include="Zombie.h">
+      <Filter>Entities\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton.h">
+      <Filter>Entities\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

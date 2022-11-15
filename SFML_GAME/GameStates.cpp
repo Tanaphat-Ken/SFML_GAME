@@ -40,6 +40,19 @@ void GameStates::initTextures()
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_DEMON_TEXTURE";
 	}
+	if (!this->textures["SKELETON_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/Skeleton/Skeleton.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_SKELETON_TEXTURE";
+	}
+	if (!this->textures["ZOMBIE_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/Zombie/Zombie.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_ZOMBIE_TEXTURE";
+	}
+	if (!this->textures["IMP_SHEET"].loadFromFile("Resources/Images/Sprites/Enemy/Imp/Imp.png"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_IMP_TEXTURE";
+	}
+	
 }
 
 void GameStates::initPauseMenu()
@@ -58,6 +71,21 @@ void GameStates::initEntity()
 	}
 	this->sword = new Sword(window, 924, 520, this->textures["SWORD"]);
 	this->demon = new Demon(rand() % 1920, rand() % 950, this->textures["DEMON_SHEET"]);
+
+	//TEST FOR MORE ENEMY
+	for (int i = 0; i < zombie_size; i++)
+	{
+		this->zombie[i] = new Zombie(rand() % 1920, rand() % 950, this->textures["ZOMBIE_SHEET"]);
+	}
+	for (int i = 0; i < skeleton_size; i++)
+	{
+		this->skeleton[i] = new Skeleton(rand() % 1920, rand() % 950, this->textures["SKELETON_SHEET"]);
+	}
+	for (int i = 0; i < imp_size; i++)
+	{
+		this->imp[i] = new Imp(rand() % 50 - 150, rand() % 950, this->textures["IMP_SHEET"]);
+	}
+
 }
 
 
@@ -81,6 +109,20 @@ GameStates::~GameStates()
 	for (int i = 0; i < goblin_size; i++)
 	{
 		delete this->goblin[i];
+	}
+
+	//TEST FOR MORE ENEMY
+	for (int i = 0; i < zombie_size; i++)
+	{
+		delete this->zombie[i];
+	}
+	for (int i = 0; i < skeleton_size; i++)
+	{
+		delete this->skeleton[i];
+	}
+	for (int i = 0; i < imp_size; i++)
+	{
+		delete this->imp[i];
 	}
 }
 
@@ -183,6 +225,20 @@ void GameStates::updatePlayerInput(const float& dt)
 		else if (posenemy.y > posplayer.y)
 			this->demon->move(0.f, -1.f, dt);
 	}
+
+	//TEST FOR IMP
+	for (int i = 0; i < imp_size; i++)
+	{
+		posenemy = this->imp[i]->getPosition();
+		if (posenemy.x < 1970)
+		{
+			if (posenemy.x > 1970)
+				this->imp[i]->move(-1.f, 0.f, dt);
+			else
+				this->imp[i]->move(1.f, 0.f, dt);
+		}
+	}
+
 }
 
 void GameStates::updatePauseMenuButtons()
@@ -217,6 +273,7 @@ void GameStates::update(const float& dt)
 		this->player->update(dt);
 		this->sword->update(dt);
 		this->demon->update(dt);
+
 		if (this->demon->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 		{
 			this->endState();
@@ -247,6 +304,24 @@ void GameStates::update(const float& dt)
 						playerHP++;
 			}
 		}
+
+		//TEST FOR MORE ENEMY
+		for (int i = 0; i < zombie_size; i++)
+		{
+			this->zombie[i]->update(dt);
+		}
+		for (int i = 0; i < skeleton_size; i++)
+		{
+			this->skeleton[i]->update(dt);
+		}
+		for (int i = 0; i < imp_size; i++)
+		{
+			this->imp[i]->update(dt);
+			if (this->imp[i]->getPosition().x > 1970)
+				this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+			else if (this->imp[i]->getPosition().x < -50)
+				this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+		}
 	}
 	else //pause
 	{
@@ -269,9 +344,27 @@ void GameStates::render(sf::RenderTarget* target)
 	{
 		this->goblin[i]->render(*target);
 	}
+
+	//TEST FOR MORE ENEMY
+	for (int i = 0; i < zombie_size; i++)
+	{
+		this->zombie[i]->render(*target);
+	}
+	for (int i = 0; i < skeleton_size; i++)
+	{
+		this->skeleton[i]->render(*target);
+	}
+	for (int i = 0; i < imp_size; i++)
+	{
+		this->imp[i]->render(*target);
+	}
+	//
+
 	if (this->Pause) //pauseMenu render
 	{
 		this->pmenu->render(*target);
 	}
+
+	
 }
 

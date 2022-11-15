@@ -147,14 +147,17 @@
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Goblin.cpp" />
     <ClCompile Include="HitboxComponent.cpp" />
+    <ClCompile Include="Imp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MovementComponents.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scoreboard.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Sword.cpp" />
+    <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
@@ -165,13 +168,16 @@
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Goblin.h" />
     <ClInclude Include="HitboxComponent.h" />
+    <ClInclude Include="Imp.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MovementComponents.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scoreboard.h" />
+    <ClInclude Include="Skeleton.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Sword.h" />
+    <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
