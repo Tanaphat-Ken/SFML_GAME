@@ -79,13 +79,24 @@ void GameStates::initEntity()
 	}
 	for (int i = 0; i < skeleton_size; i++)
 	{
-		this->skeleton[i] = new Skeleton(rand() % 1920, rand() % 950, this->textures["SKELETON_SHEET"]);
+		this->skeleton[i] = new Skeleton(rand() % 50 - 150, rand() % 1080, this->textures["SKELETON_SHEET"]);
 	}
 	for (int i = 0; i < imp_size; i++)
 	{
 		this->imp[i] = new Imp(rand() % 50 - 150, rand() % 950, this->textures["IMP_SHEET"]);
 	}
 
+}
+
+void GameStates::initHpBar()
+{
+	this->hpHidBar.setSize(sf::Vector2f(960.f, 20.f));
+	this->hpHidBar.setFillColor(sf::Color::Red);
+	this->hpHidBar.setPosition(480.f, 20.f);
+
+	this->hpShowBar.setSize(sf::Vector2f(960.f, 20.f));
+	this->hpShowBar.setFillColor(sf::Color::Green);
+	this->hpShowBar.setPosition(this->hpHidBar.getPosition());
 }
 
 
@@ -98,6 +109,7 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 	this->initEntity();
 	this->initPauseMenu();
 	this->initBackground();
+	this->initHpBar();
 }
 
 GameStates::~GameStates()
@@ -112,18 +124,34 @@ GameStates::~GameStates()
 	}
 
 	//TEST FOR MORE ENEMY
-	for (int i = 0; i < zombie_size; i++)
+	if (Clock.getElapsedTime().asSeconds() > 150)
 	{
-		delete this->zombie[i];
+		for (int i = 0; i < zombie_size; i++)
+		{
+			delete this->zombie[i];
+		}
 	}
-	for (int i = 0; i < skeleton_size; i++)
+	if (Clock.getElapsedTime().asSeconds() > 45)
 	{
-		delete this->skeleton[i];
+		for (int i = 0; i < skeleton_size; i++)
+		{
+			delete this->skeleton[i];
+		}
 	}
-	for (int i = 0; i < imp_size; i++)
+	if (Clock.getElapsedTime().asSeconds() > 85)
 	{
-		delete this->imp[i];
+		for (int i = 0; i < imp_size; i++)
+		{
+			delete this->imp[i];
+		}
 	}
+}
+
+void GameStates::updateHpBar()
+{
+	this->hpShowBar.setSize(sf::Vector2f(playerHP*960.f/30.f, 20.f));
+	this->hpShowBar.setFillColor(sf::Color::Green);
+	this->hpShowBar.setPosition(this->hpHidBar.getPosition());
 }
 
 void GameStates::updateInput(const float& dt)
@@ -226,19 +254,78 @@ void GameStates::updatePlayerInput(const float& dt)
 			this->demon->move(0.f, -1.f, dt);
 	}
 
-	//TEST FOR IMP
-	for (int i = 0; i < imp_size; i++)
+	//zombie
+	if (Clock.getElapsedTime().asSeconds() > 150)
 	{
-		posenemy = this->imp[i]->getPosition();
+		for (int i = 0; i < zombie_size; i++)
+		{
+			posenemy = this->zombie[i]->getPosition();
+			if (posenemy.x > posplayer.x)
+			{
+				this->zombie[i]->move(-1.f, 0.f, dt);
+				if (posenemy.y > posplayer.y)
+					this->zombie[i]->move(0.f, -1.f, dt);
+				else if (posenemy.y < posplayer.y)
+					this->zombie[i]->move(0.f, 1.f, dt);
+			}
+			else if (posenemy.x < posplayer.x)
+			{
+				this->zombie[i]->move(1.f, 0.f, dt);
+				if (posenemy.y > posplayer.y)
+					this->zombie[i]->move(0.f, -1.f, dt);
+				else if (posenemy.y < posplayer.y)
+					this->zombie[i]->move(0.f, 1.f, dt);
+			}
+			else if (posenemy.y < posplayer.y)
+				this->zombie[i]->move(0.f, 1.f, dt);
+			else if (posenemy.y > posplayer.y)
+				this->zombie[i]->move(0.f, -1.f, dt);
+		}
+	}
+	//TEST FOR IMP
+	if (Clock.getElapsedTime().asSeconds() > 85)
+	{
+		for (int i = 0; i < imp_size; i++)
+		{
+			posenemy = this->imp[i]->getPosition();
 
-		if (posenemy.x < 0)
-			imp_move[i] = 0;
-		if (posenemy.x > 1970)
-			imp_move[i] = 1;
-		if (imp_move[i] == 0)
-			this->imp[i]->move(1.f, 0.f, dt);
-		else
-			this->imp[i]->move(-1.f, 0.f, dt);
+			if (posenemy.x < 0)
+				imp_move[i] = 0;
+			if (posenemy.x > 1970)
+				imp_move[i] = 1;
+			if (imp_move[i] == 0)
+				this->imp[i]->move(1.f, 0.f, dt);
+			else
+				this->imp[i]->move(-1.f, 0.f, dt);
+		}
+	}
+	//skeleton
+	if (Clock.getElapsedTime().asSeconds() > 45)
+	{
+		for (int i = 0; i < skeleton_size; i++)
+		{
+			posenemy = this->skeleton[i]->getPosition();
+			if (posenemy.x > posplayer.x)
+			{
+				this->skeleton[i]->move(-1.f, 0.f, dt);
+				if (posenemy.y > posplayer.y)
+					this->skeleton[i]->move(0.f, -1.f, dt);
+				else if (posenemy.y < posplayer.y)
+					this->skeleton[i]->move(0.f, 1.f, dt);
+			}
+			else if (posenemy.x < posplayer.x)
+			{
+				this->skeleton[i]->move(1.f, 0.f, dt);
+				if (posenemy.y > posplayer.y)
+					this->skeleton[i]->move(0.f, -1.f, dt);
+				else if (posenemy.y < posplayer.y)
+					this->skeleton[i]->move(0.f, 1.f, dt);
+			}
+			else if (posenemy.y < posplayer.y)
+				this->skeleton[i]->move(0.f, 1.f, dt);
+			else if (posenemy.y > posplayer.y)
+				this->skeleton[i]->move(0.f, -1.f, dt);
+		}
 	}
 
 }
@@ -260,6 +347,7 @@ void GameStates::updatePauseMenuButtons()
 
 void GameStates::update(const float& dt)
 {
+	this->updateHpBar();
 	this->updateMousePos();
 	this->updateKeytime(dt);
 	this->updateInput(dt);
@@ -276,11 +364,13 @@ void GameStates::update(const float& dt)
 		this->sword->update(dt);
 		this->demon->update(dt);
 
+		//demon
 		if (this->demon->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 		{
 			this->endState();
 			Clock.restart();
 		}
+		//goblin
 		for (int i = 0; i < goblin_size; i++)
 		{
 			this->goblin[i]->update(dt);
@@ -299,58 +389,94 @@ void GameStates::update(const float& dt)
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
 				score++;
 				int drop_from_goblin = rand() % 100;
-				if (drop_from_goblin >= 90)
-					if (playerHP == 30)
+				if (drop_from_goblin >= 40)
+					if (playerHP >= 30)
 						continue;
 					else
-						playerHP++;
+						playerHP += 2;
 			}
 		}
 
-		//TEST FOR MORE ENEMY
-		for (int i = 0; i < zombie_size; i++)
+		//zombie
+		if (Clock.getElapsedTime().asSeconds() > 150)
 		{
-			this->zombie[i]->update(dt);
-		}
-		for (int i = 0; i < skeleton_size; i++)
-		{
-			this->skeleton[i]->update(dt);
-		}
-		for (int i = 0; i < imp_size; i++)
-		{
-			this->imp[i]->update(dt);
-			if (this->imp[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+			for (int i = 0; i < zombie_size; i++)
 			{
-				playerHP -= 2;
-				if (imp_move[i] == 0)
-					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
-				else if (imp_move[i] == 1)
-					this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
-				
-				if (playerHP == 0)
+				this->zombie[i]->update(dt);
+				if (this->zombie[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 				{
 					this->endState();
 					Clock.restart();
 				}
 			}
-			if (this->imp[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
+		}
+		//skeleton
+		if (Clock.getElapsedTime().asSeconds() > 45)
+		{
+			for (int i = 0; i < skeleton_size; i++)
 			{
-				score += 4;
-				if (imp_move[i] == 0)
-					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
-				else if (imp_move[i] == 1)
-					this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
-				int drop_from_imp = rand() % 100;
-				if (drop_from_imp >= 95)
-					if (playerHP == 30)
-						continue;
-					else
-						playerHP += 3;
+				this->skeleton[i]->update(dt);
+				if (this->skeleton[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+				{
+					playerHP--;
+					if (playerHP == 0)
+					{
+						this->endState();
+						Clock.restart();
+					}
+				}
+				if (this->skeleton[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
+				{
+					score += 2;
+					this->skeleton[i]->setPosition(rand() % 1920, rand() % 60 - 80);
+					int drop_from_skeleton = rand() % 100;
+					if (drop_from_skeleton >= 50)
+						if (playerHP >= 30)
+							continue;
+						else
+							playerHP += 10;
+				}
 			}
-			if (this->imp[i]->getPosition().x > 1950)
-				this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
-			else if (this->imp[i]->getPosition().x < -30)
-				this->imp[i]->setPosition(rand() % 50 - 80, rand() % 950);
+		}
+		//imp
+		if (Clock.getElapsedTime().asSeconds() > 85)
+		{
+			for (int i = 0; i < imp_size; i++)
+			{
+				this->imp[i]->update(dt);
+				if (this->imp[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+				{
+					playerHP -= 2;
+					if (imp_move[i] == 0)
+						this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+					else if (imp_move[i] == 1)
+						this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+
+					if (playerHP == 0)
+					{
+						this->endState();
+						Clock.restart();
+					}
+				}
+				if (this->imp[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
+				{
+					score += 4;
+					if (imp_move[i] == 0)
+						this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+					else if (imp_move[i] == 1)
+						this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+					int drop_from_imp = rand() % 100;
+					if (drop_from_imp >= 60)
+						if (playerHP >= 30)
+							continue;
+						else
+							playerHP += 4;
+				}
+				if (this->imp[i]->getPosition().x > 1950)
+					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+				else if (this->imp[i]->getPosition().x < -30)
+					this->imp[i]->setPosition(rand() % 50 - 80, rand() % 950);
+			}
 		}
 	}
 	else //pause
@@ -361,11 +487,14 @@ void GameStates::update(const float& dt)
 	
 }
 
+
 void GameStates::render(sf::RenderTarget* target)
 {
 	if (!target)
 		target = this->window;
 	target->draw(this->background);
+	target->draw(this->hpHidBar);
+	target->draw(this->hpShowBar);
 	this->player->render(*target);
 	this->sword->render(*target);
 	this->demon->render(*target);
@@ -376,25 +505,31 @@ void GameStates::render(sf::RenderTarget* target)
 	}
 
 	//TEST FOR MORE ENEMY
-	for (int i = 0; i < zombie_size; i++)
+	if (Clock.getElapsedTime().asSeconds() > 150)
 	{
-		this->zombie[i]->render(*target);
+		for (int i = 0; i < zombie_size; i++)
+		{
+			this->zombie[i]->render(*target);
+		}
 	}
-	for (int i = 0; i < skeleton_size; i++)
+	if (Clock.getElapsedTime().asSeconds() > 45)
 	{
-		this->skeleton[i]->render(*target);
+		for (int i = 0; i < skeleton_size; i++)
+		{
+			this->skeleton[i]->render(*target);
+		}
 	}
-	for (int i = 0; i < imp_size; i++)
+	if (Clock.getElapsedTime().asSeconds() > 85)
 	{
-		this->imp[i]->render(*target);
+		for (int i = 0; i < imp_size; i++)
+		{
+			this->imp[i]->render(*target);
+		}
 	}
-	//
-
 	if (this->Pause) //pauseMenu render
 	{
 		this->pmenu->render(*target);
 	}
-
 	
 }
 

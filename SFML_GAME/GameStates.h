@@ -12,7 +12,10 @@ private:
     int imp_move[3];
     sf::Clock Clock;
     sf::Font font;
-    PauseMenu* pmenu;
+    sf::RectangleShape hpHidBar;
+    sf::RectangleShape hpShowBar;
+    PauseMenu* pmenu; 
+    HitboxComponent* hitboxComponent;
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::RenderTexture renderTexture;
@@ -27,7 +30,6 @@ private:
     Imp* imp[3];
     Zombie* zombie[2]; //150 sec
     Demon* demon; //10 sec
-    HitboxComponent* hitboxComponent;
     sf::Vector2f posenemy, posplayer;
     
 
@@ -42,6 +44,7 @@ private:
     void initTextures();
     void initPauseMenu();
     void initEntity();
+    void initHpBar();
     
 
 public:
@@ -49,6 +52,7 @@ public:
     virtual ~GameStates();
 
     //Functions
+    void updateHpBar();
     void updateInput(const float& dt);
     void updatePlayerInput(const float& dt);
     void updatePauseMenuButtons();
