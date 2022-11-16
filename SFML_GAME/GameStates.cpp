@@ -230,13 +230,15 @@ void GameStates::updatePlayerInput(const float& dt)
 	for (int i = 0; i < imp_size; i++)
 	{
 		posenemy = this->imp[i]->getPosition();
-		if (posenemy.x < 1970)
-		{
-			if (posenemy.x > 1970)
-				this->imp[i]->move(-1.f, 0.f, dt);
-			else
-				this->imp[i]->move(1.f, 0.f, dt);
-		}
+
+		if (posenemy.x < 0)
+			imp_move[i] = 0;
+		if (posenemy.x > 1970)
+			imp_move[i] = 1;
+		if (imp_move[i] == 0)
+			this->imp[i]->move(1.f, 0.f, dt);
+		else
+			this->imp[i]->move(-1.f, 0.f, dt);
 	}
 
 }
@@ -317,10 +319,38 @@ void GameStates::update(const float& dt)
 		for (int i = 0; i < imp_size; i++)
 		{
 			this->imp[i]->update(dt);
-			if (this->imp[i]->getPosition().x > 1970)
+			if (this->imp[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+			{
+				playerHP -= 2;
+				if (imp_move[i] == 0)
+					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+				else if (imp_move[i] == 1)
+					this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+				
+				if (playerHP == 0)
+				{
+					this->endState();
+					Clock.restart();
+				}
+			}
+			if (this->imp[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
+			{
+				score += 4;
+				if (imp_move[i] == 0)
+					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+				else if (imp_move[i] == 1)
+					this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+				int drop_from_imp = rand() % 100;
+				if (drop_from_imp >= 95)
+					if (playerHP == 30)
+						continue;
+					else
+						playerHP += 3;
+			}
+			if (this->imp[i]->getPosition().x > 1950)
 				this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
-			else if (this->imp[i]->getPosition().x < -50)
-				this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+			else if (this->imp[i]->getPosition().x < -30)
+				this->imp[i]->setPosition(rand() % 50 - 80, rand() % 950);
 		}
 	}
 	else //pause

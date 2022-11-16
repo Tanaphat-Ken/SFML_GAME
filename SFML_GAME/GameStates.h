@@ -9,6 +9,7 @@ class GameStates :
     public State 
 {
 private:
+    int imp_move[3];
     sf::Clock Clock;
     sf::Font font;
     PauseMenu* pmenu;
