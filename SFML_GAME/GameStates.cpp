@@ -149,7 +149,7 @@ GameStates::~GameStates()
 
 void GameStates::updateHpBar()
 {
-	this->hpShowBar.setSize(sf::Vector2f(playerHP*960.f/30.f, 20.f));
+	this->hpShowBar.setSize(sf::Vector2f(playerHP*960.f/playerMaxHP, 20.f));
 	this->hpShowBar.setFillColor(sf::Color::Green);
 	this->hpShowBar.setPosition(this->hpHidBar.getPosition());
 }
@@ -364,11 +364,16 @@ void GameStates::update(const float& dt)
 		this->sword->update(dt);
 		this->demon->update(dt);
 
-		//demon
-		if (this->demon->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+		if (playerHP <= 0)
 		{
 			this->endState();
 			Clock.restart();
+		}
+
+		//demon
+		if (this->demon->getGlobalBounds().intersects(this->player->getGlobalBounds()))
+		{
+			playerHP = 0;
 		}
 		//goblin
 		for (int i = 0; i < goblin_size; i++)
@@ -378,11 +383,6 @@ void GameStates::update(const float& dt)
 			{
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
 				playerHP--;
-				if (playerHP == 0)
-				{
-					this->endState();
-					Clock.restart();
-				}
 			}
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 			{
@@ -390,7 +390,7 @@ void GameStates::update(const float& dt)
 				score++;
 				int drop_from_goblin = rand() % 100;
 				if (drop_from_goblin >= 40)
-					if (playerHP >= 30)
+					if (playerHP >= playerMaxHP)
 						continue;
 					else
 						playerHP += 2;
@@ -405,8 +405,7 @@ void GameStates::update(const float& dt)
 				this->zombie[i]->update(dt);
 				if (this->zombie[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 				{
-					this->endState();
-					Clock.restart();
+					playerHP = 0;
 				}
 			}
 		}
@@ -419,11 +418,6 @@ void GameStates::update(const float& dt)
 				if (this->skeleton[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 				{
 					playerHP--;
-					if (playerHP == 0)
-					{
-						this->endState();
-						Clock.restart();
-					}
 				}
 				if (this->skeleton[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 				{
@@ -431,7 +425,7 @@ void GameStates::update(const float& dt)
 					this->skeleton[i]->setPosition(rand() % 1920, rand() % 60 - 80);
 					int drop_from_skeleton = rand() % 100;
 					if (drop_from_skeleton >= 50)
-						if (playerHP >= 30)
+						if (playerHP >= playerMaxHP)
 							continue;
 						else
 							playerHP += 10;
@@ -451,12 +445,6 @@ void GameStates::update(const float& dt)
 						this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
 					else if (imp_move[i] == 1)
 						this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
-
-					if (playerHP == 0)
-					{
-						this->endState();
-						Clock.restart();
-					}
 				}
 				if (this->imp[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 				{
@@ -467,7 +455,7 @@ void GameStates::update(const float& dt)
 						this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
 					int drop_from_imp = rand() % 100;
 					if (drop_from_imp >= 60)
-						if (playerHP >= 30)
+						if (playerHP >= playerMaxHP)
 							continue;
 						else
 							playerHP += 4;

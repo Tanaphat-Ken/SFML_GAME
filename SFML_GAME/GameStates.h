@@ -34,7 +34,8 @@ private:
     
 
     //Attribute
-    int playerHP = 30;
+    int playerHP = 3000;
+    int playerMaxHP = 3000;
     int score = 0;
 
     //Functions

@@ -18,7 +18,7 @@ Skeleton::Skeleton(float x, float y, sf::Texture& texture_sheet)
 	this->initVariables();
 
 	this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
-	this->createMovementComponent(1000.f, 10.f, 0.1f);
+	this->createMovementComponent(500.f, 10.f, 0.1f);
 	this->createAnimationComponent(texture_sheet);
 
 	this->setPosition(x, y);

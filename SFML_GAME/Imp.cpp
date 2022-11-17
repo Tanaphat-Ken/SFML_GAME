@@ -18,7 +18,7 @@ Imp::Imp(float x, float y, sf::Texture& texture_sheet)
 	this->initVariables();
 
 	this->createHitboxComponent(this->sprite, 16.f, 23.f, 32.f, 32.f);
-	this->createMovementComponent(2500.f, 75.f, 5.f);
+	this->createMovementComponent(2000.f, 75.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
 
 	this->setPosition(x, y);
