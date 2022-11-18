@@ -10,8 +10,15 @@ class GameStates :
 {
 private:
     int imp_move[3];
+    int check = 1;
+    float Time = 0;
+    float starttime = 0;
+    std::stringstream ss1;
+    std::stringstream ss2;
     sf::Clock Clock;
     sf::Font font;
+    sf::Text current_score;
+    sf::Text current_time;
     sf::RectangleShape hpHidBar;
     sf::RectangleShape hpShowBar;
     PauseMenu* pmenu; 
@@ -34,8 +41,10 @@ private:
     
 
     //Attribute
-    int playerHP = 3000;
-    int playerMaxHP = 3000;
+    int immortality = 0;
+    int immortal_time = 3;
+    int playerHP = 30;
+    int playerMaxHP = 30;
     int score = 0;
 
     //Functions
@@ -46,6 +55,7 @@ private:
     void initPauseMenu();
     void initEntity();
     void initHpBar();
+    void initText();
     
 
 public:
@@ -53,6 +63,7 @@ public:
     virtual ~GameStates();
 
     //Functions
+    void updateText(int time, float Time);
     void updateHpBar();
     void updateInput(const float& dt);
     void updatePlayerInput(const float& dt);

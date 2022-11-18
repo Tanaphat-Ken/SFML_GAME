@@ -99,6 +99,22 @@ void GameStates::initHpBar()
 	this->hpShowBar.setPosition(this->hpHidBar.getPosition());
 }
 
+void GameStates::initText()
+{
+	ss1 << score;
+	current_score.setString(ss1.str());
+	current_score.setFont(font);
+	current_score.setOrigin(current_score.getGlobalBounds().width / 2, current_score.getGlobalBounds().height / 2);
+	current_score.setCharacterSize(50);
+	current_score.setPosition(20, 20);
+
+	ss2 << Time;
+	current_time.setString(ss2.str());
+	current_time.setFont(font);
+	current_time.setOrigin(current_time.getGlobalBounds().width / 2, current_time.getGlobalBounds().height / 2);
+	current_time.setCharacterSize(50);
+	current_time.setPosition(1700, 20);
+}
 
 //CON /DES
 GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
@@ -110,6 +126,7 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 	this->initPauseMenu();
 	this->initBackground();
 	this->initHpBar();
+	this->initText();
 }
 
 GameStates::~GameStates()
@@ -145,6 +162,12 @@ GameStates::~GameStates()
 			delete this->imp[i];
 		}
 	}
+}
+
+void GameStates::updateText(int score,float Time)
+{
+	current_score.setString(std::to_string(score));
+	current_time.setString(std::to_string(Time));
 }
 
 void GameStates::updateHpBar()
@@ -347,7 +370,6 @@ void GameStates::updatePauseMenuButtons()
 
 void GameStates::update(const float& dt)
 {
-	this->updateHpBar();
 	this->updateMousePos();
 	this->updateKeytime(dt);
 	this->updateInput(dt);
@@ -360,6 +382,8 @@ void GameStates::update(const float& dt)
 		std::cout << score << std::endl;
 		std::cout << std::endl;
 		this->updatePlayerInput(dt);
+		this->updateText(score,Time);
+		this->updateHpBar();
 		this->player->update(dt);
 		this->sword->update(dt);
 		this->demon->update(dt);
@@ -369,11 +393,40 @@ void GameStates::update(const float& dt)
 			this->endState();
 			Clock.restart();
 		}
+		if (immortality == 1)
+		{
+			if (check == 1)
+			{
+				starttime = Clock.getElapsedTime().asSeconds();
+				check = 0;
+			}
+			else if (Time - starttime >= immortal_time)
+			{
+				immortality = 0;
+				check = 1;
+			}
+		}
 
 		//demon
 		if (this->demon->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 		{
-			playerHP = 0;
+			if (immortality == 1)
+			{
+				if (check == 1)
+				{
+					starttime = Clock.getElapsedTime().asSeconds();
+					check = 0;
+				}
+				else if (Time - starttime >= immortal_time)
+				{
+					immortality = 0;
+					check = 1;
+				}
+				else
+					this->demon->setPosition(rand() % 1920, rand() % 950);
+			}
+			else
+				playerHP = 0;
 		}
 		//goblin
 		for (int i = 0; i < goblin_size; i++)
@@ -381,8 +434,26 @@ void GameStates::update(const float& dt)
 			this->goblin[i]->update(dt);
 			if (this->goblin[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 			{
-				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
-				playerHP--;
+				if (immortality == 1)
+				{
+					if (check == 1)
+					{
+						starttime = Clock.getElapsedTime().asSeconds();
+						check = 0;
+					}
+					else if (Time - starttime >= immortal_time)
+					{
+						immortality = 0;
+						check = 1;
+					}
+					else
+						this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
+				}
+				else
+				{
+					this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
+					playerHP--;
+				}
 			}
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 			{
@@ -390,10 +461,16 @@ void GameStates::update(const float& dt)
 				score++;
 				int drop_from_goblin = rand() % 100;
 				if (drop_from_goblin >= 40)
+				{
 					if (playerHP >= playerMaxHP)
 						continue;
 					else
 						playerHP += 2;
+				}
+				if (drop_from_goblin >= 90)
+				{
+					immortality = 1;
+				}
 			}
 		}
 
@@ -405,7 +482,23 @@ void GameStates::update(const float& dt)
 				this->zombie[i]->update(dt);
 				if (this->zombie[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 				{
-					playerHP = 0;
+					if (immortality == 1)
+					{
+						if (check == 1)
+						{
+							starttime = Clock.getElapsedTime().asSeconds();
+							check = 0;
+						}
+						else if (Time - starttime >= immortal_time)
+						{
+							immortality = 0;
+							check = 1;
+						}
+						else
+							this->zombie[i]->setPosition(rand() % 1920, rand() % 950);
+					}
+					else
+						playerHP = 0;
 				}
 			}
 		}
@@ -417,7 +510,23 @@ void GameStates::update(const float& dt)
 				this->skeleton[i]->update(dt);
 				if (this->skeleton[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 				{
-					playerHP--;
+					if (immortality == 1)
+					{
+						if (check == 1)
+						{
+							starttime = Clock.getElapsedTime().asSeconds();
+							check = 0;
+						}
+						else if (Time - starttime >= immortal_time)
+						{
+							immortality = 0;
+							check = 1;
+						}
+						else
+							this->skeleton[i]->setPosition(rand() % 1920, rand() % 950);
+					}
+					else
+						playerHP--;
 				}
 				if (this->skeleton[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 				{
@@ -425,10 +534,16 @@ void GameStates::update(const float& dt)
 					this->skeleton[i]->setPosition(rand() % 1920, rand() % 60 - 80);
 					int drop_from_skeleton = rand() % 100;
 					if (drop_from_skeleton >= 50)
+					{
 						if (playerHP >= playerMaxHP)
 							continue;
 						else
 							playerHP += 10;
+					}
+					if (drop_from_skeleton >= 90)
+					{
+						immortality = 1;
+					}
 				}
 			}
 		}
@@ -440,11 +555,29 @@ void GameStates::update(const float& dt)
 				this->imp[i]->update(dt);
 				if (this->imp[i]->getGlobalBounds().intersects(this->player->getGlobalBounds()))
 				{
-					playerHP -= 2;
-					if (imp_move[i] == 0)
-						this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
-					else if (imp_move[i] == 1)
-						this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+					if (immortality == 1)
+					{
+						if (check == 1)
+						{
+							starttime = Clock.getElapsedTime().asSeconds();
+							check = 0;
+						}
+						else if (Time - starttime >= immortal_time)
+						{
+							immortality = 0;
+							check = 1;
+						}
+						else
+							this->imp[i]->setPosition(rand() % 1920, rand() % 950);
+					}
+					else
+					{
+						playerHP -= 2;
+						if (imp_move[i] == 0)
+							this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+						else if (imp_move[i] == 1)
+							this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
+					}
 				}
 				if (this->imp[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 				{
@@ -455,10 +588,16 @@ void GameStates::update(const float& dt)
 						this->imp[i]->setPosition(rand() % 50 - 50, rand() % 950);
 					int drop_from_imp = rand() % 100;
 					if (drop_from_imp >= 60)
+					{
 						if (playerHP >= playerMaxHP)
 							continue;
 						else
 							playerHP += 4;
+					}
+					if (drop_from_imp >= 90)
+					{
+						immortality = 1;
+					}
 				}
 				if (this->imp[i]->getPosition().x > 1950)
 					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
@@ -483,6 +622,8 @@ void GameStates::render(sf::RenderTarget* target)
 	target->draw(this->background);
 	target->draw(this->hpHidBar);
 	target->draw(this->hpShowBar);
+	target->draw(this->current_score);
+	target->draw(this->current_time);
 	this->player->render(*target);
 	this->sword->render(*target);
 	this->demon->render(*target);
