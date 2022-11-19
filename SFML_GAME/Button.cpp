@@ -74,11 +74,25 @@ void Button::update(const sf::Vector2f& mousePos)
 	case BTN_HOVER:
 		this->shape.setFillColor(this->hoverColor);
 		this->text.setFillColor(this->textHoverColor);
+		if (!buffer.loadFromFile("Resources/Sound/Sound Effect/switch-button-106349.ogg"))
+		{
+			throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HOVER";
+		}
+		hover.setBuffer(buffer);
+		hover.setVolume(15);
+		hover.play();
 		break;
 
 	case BTN_ACTIVE:
 		this->shape.setFillColor(this->activeColor);
 		this->text.setFillColor(this->textActiveColor);
+		if (!buffer2.loadFromFile("Resources/Sound/Sound Effect/impact-fx-41103.ogg"))
+		{
+			throw "ERROR::GAME_STATE::COULD_NOT_LOAD_ACTIVE";
+		}
+		active.setBuffer(buffer2);
+		active.setVolume(15);
+		active.play();
 		break;
 
 	default:

@@ -34,7 +34,7 @@ void MainMenuState::initMusic()
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_MENU_MUSIC";
 	}
-	this->music["MENU_MUSIC"].setVolume(12);
+	this->music["MENU_MUSIC"].setVolume(10);
 	this->music["MENU_MUSIC"].play();
 	this->music["MENU_MUSIC"].setLoop(true);
 }
@@ -100,12 +100,12 @@ void MainMenuState::updateButtons()
 	//Scoreboard
 	if (this->buttons["SCOREBOARD"]->isPressed())
 	{
-		this->states->push(new Scoreboard(this->window, this->states));
+		this->states->push(new Scoreboard(this->window, this->states,score));
 	}
 	//quit
 	if (this->buttons["END_STATE"]->isPressed())
 	{
-		this->endState();
+		this->window->close();
 	}
 }
 

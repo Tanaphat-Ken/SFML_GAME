@@ -61,7 +61,7 @@ void GameStates::initSound()
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_GAME_MUSIC";
 	}
-	this->music["GAME_MUSIC"].setVolume(12);
+	this->music["GAME_MUSIC"].setVolume(10);
 	this->music["GAME_MUSIC"].play();
 	this->music["GAME_MUSIC"].setLoop(true);
 	if (!this->sounds["MONSTER_DEAD"].loadFromFile("Resources/Sound/Sound Effect/zombie-death-2-95167.ogg"))
@@ -69,14 +69,21 @@ void GameStates::initSound()
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_MONSTER_DEAD";
 	}
 	monster_dead.setBuffer(this->sounds["MONSTER_DEAD"]);
-	monster_dead.setVolume(12);
+	monster_dead.setVolume(8);
 
 	if (!this->sounds["IMMORTALITY"].loadFromFile("Resources/Sound/Sound Effect/IMMORTALITY.ogg"))
 	{
 		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_IMMORTALITY";
 	}
 	Immortality_effect.setBuffer(this->sounds["IMMORTALITY"]);
-	Immortality_effect.setVolume(12);
+	Immortality_effect.setVolume(10);
+
+	if (!this->sounds["DEAD"].loadFromFile("Resources/Sound/Sound Effect/075609_robotic-voice-39now-you-are-dead39-hd-80275.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_DEAD";
+	}
+	player_dead.setBuffer(this->sounds["DEAD"]);
+	player_dead.setVolume(10);
 }
 
 void GameStates::initPauseMenu()
@@ -428,12 +435,15 @@ void GameStates::update(const float& dt)
 
 		if (playerHP <= 0)
 		{
-			this->states->push(new MainMenuState(this->window, this->states));
 			this->music["GAME_MUSIC"].stop();
+			player_dead.play();
+			this->states->push(new GameOver(this->window, this->states,score));
 			this->endState();
 			Clock.restart();
 			playerHP = playerMaxHP;
 		}
+		if (playerHP >= playerMaxHP)
+			playerHP = playerMaxHP;
 		if (immortality == 1)
 		{
 			if (check == 1)
@@ -497,7 +507,7 @@ void GameStates::update(const float& dt)
 				else
 				{
 					this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
-					playerHP--;
+					playerHP -= 5;
 				}
 			}
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
@@ -576,7 +586,7 @@ void GameStates::update(const float& dt)
 					}
 					else
 					{
-						playerHP--;
+						playerHP -= 9;
 						this->skeleton[i]->setPosition(rand() % 1920, rand() % 950);
 					}
 				}
@@ -591,7 +601,7 @@ void GameStates::update(const float& dt)
 						if (playerHP >= playerMaxHP)
 							continue;
 						else
-							playerHP += 10;
+							playerHP += 1;
 					}
 					if (drop_from_skeleton <= immortal_percent)
 					{
@@ -625,7 +635,7 @@ void GameStates::update(const float& dt)
 					}
 					else
 					{
-						playerHP -= 2;
+						playerHP -= 12;
 						if (imp_move[i] == 0)
 							this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
 						else if (imp_move[i] == 1)

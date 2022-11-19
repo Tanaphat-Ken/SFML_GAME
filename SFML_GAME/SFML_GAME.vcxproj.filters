@@ -90,6 +90,9 @@
     <ClCompile Include="Skeleton.cpp">
       <Filter>Entities\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Skeleton.h">
       <Filter>Entities\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

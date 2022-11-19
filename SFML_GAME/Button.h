@@ -18,6 +18,11 @@ class Button
 private:
 	short unsigned buttonState;
 
+	sf::SoundBuffer buffer;
+	sf::Sound hover;
+	sf::SoundBuffer buffer2;
+	sf::Sound active;
+
 	sf::RectangleShape shape;
 	sf::Font* font;
 	sf::Text text;

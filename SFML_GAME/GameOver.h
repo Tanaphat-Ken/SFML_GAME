@@ -1,24 +1,21 @@
-#ifndef SCOREBOARD_H
-#define SCOREBOARD_H
+#ifndef GAMEOVER_H
+#define GAMEOVER_H
 
 #include "State.h"
 #include "Button.h"
 #include "GameStates.h"
-#include "MainMenuState.h"
 
-class Scoreboard :
+class GameOver :
     public State
 {
 private:
-    sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::Font font;
-    sf::RectangleShape bg;
-    sf::RectangleShape container;
     std::stringstream ss;
-    std::stringstream ss1;
-    sf::Text SCOREBOARD;
-    sf::Text score1;
+    sf::Text GAMEOVER;
+    std::string playerInput;
+    sf::Text playerText;
+    sf::Event event;
 
     std::map<std::string, Button*>buttons;
 
@@ -30,13 +27,14 @@ private:
     void initFonts();
     void initButton();
     void initText();
+    void initPlayerText();
 
 public:
-    Scoreboard(sf::RenderWindow* window, std::stack<State*>* states, int score);
-    virtual ~Scoreboard();
+    GameOver(sf::RenderWindow* window, std::stack<State*>* states, int score);
+    virtual ~GameOver();
 
     //Functions
-    
+
     void updateInput(const float& dt);
     void updateButtons();
     void update(const float& dt);
@@ -45,4 +43,5 @@ public:
 };
 
 #endif
+
 

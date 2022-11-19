@@ -22,6 +22,7 @@ protected:
 	float keytime;
 	float keytimeMax;
 
+	
 	sf::Vector2i mousePosScreen;
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
@@ -35,6 +36,10 @@ protected:
 public:
 	State(sf::RenderWindow* window, std::stack<State*>* states);
 	virtual ~State();
+
+	//Attribute
+	int score = 0;
+	float Time = 0;
 
 	//Accessors
 	const bool& getEnd() const;

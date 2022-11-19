@@ -5,6 +5,7 @@
 #include "PauseMenu.h"
 #include "Entity.h"
 #include "MainMenuState.h"
+#include "GameOver.h"
 
 class GameStates :
     public State 
@@ -12,7 +13,6 @@ class GameStates :
 private:
     int imp_move[3];
     int check = 1;
-    float Time = 0;
     float starttime = 0;
     std::stringstream ss1;
     std::stringstream ss2;
@@ -24,6 +24,7 @@ private:
     sf::Text current_buff;
     sf::Sound monster_dead;
     sf::Sound Immortality_effect;
+    sf::Sound player_dead;
     sf::RectangleShape hpHidBar;
     sf::RectangleShape hpShowBar;
     PauseMenu* pmenu; 
@@ -51,7 +52,6 @@ private:
     int immortal_percent = 2;
     int playerHP = 30;
     int playerMaxHP = 30;
-    int score = 0;
 
     //Functions
 
