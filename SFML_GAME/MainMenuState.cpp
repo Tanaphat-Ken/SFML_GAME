@@ -28,6 +28,17 @@ void MainMenuState::initFonts()
 	}
 }
 
+void MainMenuState::initMusic()
+{
+	if (!this->music["MENU_MUSIC"].openFromFile("Resources/Sound/Music/retrowave1-6271.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_MENU_MUSIC";
+	}
+	this->music["MENU_MUSIC"].setVolume(12);
+	this->music["MENU_MUSIC"].play();
+	this->music["MENU_MUSIC"].setLoop(true);
+}
+
 void MainMenuState::initButton()
 {
 	this->buttons["GAME_STATE"] = new Button(250.f, 180.f, 250.f, 50.f ,&this->font, "NEW GAME", 50,
@@ -52,6 +63,7 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
 {
 	this->initVariables();
 	this->initBackground();
+	this->initMusic();
 	this->initFonts();
 	this->initButton();
 
@@ -83,6 +95,7 @@ void MainMenuState::updateButtons()
 	{
 		this->states->push(new GameStates(this->window,this->states));
 		window->setMouseCursorVisible(false);
+		this->music["MENU_MUSIC"].stop();
 	}
 	//Scoreboard
 	if (this->buttons["SCOREBOARD"]->isPressed())

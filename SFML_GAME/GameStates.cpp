@@ -55,6 +55,30 @@ void GameStates::initTextures()
 	
 }
 
+void GameStates::initSound()
+{
+	if (!this->music["GAME_MUSIC"].openFromFile("Resources/Sound/Music/2018-08-02-17971.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_GAME_MUSIC";
+	}
+	this->music["GAME_MUSIC"].setVolume(12);
+	this->music["GAME_MUSIC"].play();
+	this->music["GAME_MUSIC"].setLoop(true);
+	if (!this->sounds["MONSTER_DEAD"].loadFromFile("Resources/Sound/Sound Effect/zombie-death-2-95167.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_MONSTER_DEAD";
+	}
+	monster_dead.setBuffer(this->sounds["MONSTER_DEAD"]);
+	monster_dead.setVolume(12);
+
+	if (!this->sounds["IMMORTALITY"].loadFromFile("Resources/Sound/Sound Effect/IMMORTALITY.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_IMMORTALITY";
+	}
+	Immortality_effect.setBuffer(this->sounds["IMMORTALITY"]);
+	Immortality_effect.setVolume(12);
+}
+
 void GameStates::initPauseMenu()
 {
 	this->pmenu = new PauseMenu(*this->window, this->font);
@@ -121,6 +145,7 @@ GameStates::GameStates(sf::RenderWindow* window, std::stack<State*>* states)
 	: State(window,states)
 {
 	this->initTextures();
+	this->initSound();
 	this->initFonts();
 	this->initEntity();
 	this->initPauseMenu();
@@ -168,6 +193,17 @@ void GameStates::updateText(int score,float Time)
 {
 	current_score.setString(std::to_string(score));
 	current_time.setString(std::to_string(Time));
+	if (immortality == 1)
+	{
+		current_buff.setString("IMMORTALITY");
+		current_buff.setFont(font);
+		current_buff.setOrigin(current_time.getGlobalBounds().width / 2, current_time.getGlobalBounds().height / 2);
+		current_buff.setCharacterSize(100);
+		current_buff.setPosition(750, 60);
+		current_buff.setFillColor(sf::Color(250, 0, 0, 250));
+	}
+	else
+		current_buff.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 void GameStates::updateHpBar()
@@ -314,7 +350,7 @@ void GameStates::updatePlayerInput(const float& dt)
 
 			if (posenemy.x < 0)
 				imp_move[i] = 0;
-			if (posenemy.x > 1970)
+			if (posenemy.x > 1920)
 				imp_move[i] = 1;
 			if (imp_move[i] == 0)
 				this->imp[i]->move(1.f, 0.f, dt);
@@ -363,6 +399,8 @@ void GameStates::updatePauseMenuButtons()
 	if (this->pmenu->isButtonPressed("QUIT"))
 	{
 		window->setMouseCursorVisible(true);
+		this->states->push(new MainMenuState(this->window, this->states));
+		this->music["GAME_MUSIC"].stop();
 		this->endState();
 		Clock.restart();
 	}
@@ -390,14 +428,18 @@ void GameStates::update(const float& dt)
 
 		if (playerHP <= 0)
 		{
+			this->states->push(new MainMenuState(this->window, this->states));
+			this->music["GAME_MUSIC"].stop();
 			this->endState();
 			Clock.restart();
+			playerHP = playerMaxHP;
 		}
 		if (immortality == 1)
 		{
 			if (check == 1)
 			{
 				starttime = Clock.getElapsedTime().asSeconds();
+				Immortality_effect.play();
 				check = 0;
 			}
 			else if (Time - starttime >= immortal_time)
@@ -426,7 +468,10 @@ void GameStates::update(const float& dt)
 					this->demon->setPosition(rand() % 1920, rand() % 950);
 			}
 			else
+			{
 				playerHP = 0;
+				this->demon->setPosition(rand() % 1920, rand() % 950);
+			}
 		}
 		//goblin
 		for (int i = 0; i < goblin_size; i++)
@@ -457,6 +502,7 @@ void GameStates::update(const float& dt)
 			}
 			if (this->goblin[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 			{
+				monster_dead.play();
 				this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
 				score++;
 				int drop_from_goblin = rand() % 100;
@@ -467,7 +513,7 @@ void GameStates::update(const float& dt)
 					else
 						playerHP += 2;
 				}
-				if (drop_from_goblin >= 90)
+				if (drop_from_goblin <= immortal_percent)
 				{
 					immortality = 1;
 				}
@@ -498,7 +544,10 @@ void GameStates::update(const float& dt)
 							this->zombie[i]->setPosition(rand() % 1920, rand() % 950);
 					}
 					else
+					{
 						playerHP = 0;
+						this->zombie[i]->setPosition(rand() % 1920, rand() % 950);
+					}
 				}
 			}
 		}
@@ -526,10 +575,14 @@ void GameStates::update(const float& dt)
 							this->skeleton[i]->setPosition(rand() % 1920, rand() % 950);
 					}
 					else
+					{
 						playerHP--;
+						this->skeleton[i]->setPosition(rand() % 1920, rand() % 950);
+					}
 				}
 				if (this->skeleton[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 				{
+					monster_dead.play();
 					score += 2;
 					this->skeleton[i]->setPosition(rand() % 1920, rand() % 60 - 80);
 					int drop_from_skeleton = rand() % 100;
@@ -540,7 +593,7 @@ void GameStates::update(const float& dt)
 						else
 							playerHP += 10;
 					}
-					if (drop_from_skeleton >= 90)
+					if (drop_from_skeleton <= immortal_percent)
 					{
 						immortality = 1;
 					}
@@ -581,6 +634,7 @@ void GameStates::update(const float& dt)
 				}
 				if (this->imp[i]->getGlobalBounds().intersects(this->sword->getGlobalBounds()))
 				{
+					monster_dead.play();
 					score += 4;
 					if (imp_move[i] == 0)
 						this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
@@ -594,13 +648,13 @@ void GameStates::update(const float& dt)
 						else
 							playerHP += 4;
 					}
-					if (drop_from_imp >= 90)
+					if (drop_from_imp <= immortal_percent)
 					{
 						immortality = 1;
 					}
 				}
-				if (this->imp[i]->getPosition().x > 1950)
-					this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
+				if (this->imp[i]->getPosition().x > 1920)
+					this->imp[i]->setPosition(rand() % 50 + 1920, rand() % 950);
 				else if (this->imp[i]->getPosition().x < -30)
 					this->imp[i]->setPosition(rand() % 50 - 80, rand() % 950);
 			}
@@ -624,6 +678,7 @@ void GameStates::render(sf::RenderTarget* target)
 	target->draw(this->hpShowBar);
 	target->draw(this->current_score);
 	target->draw(this->current_time);
+	target->draw(this->current_buff);
 	this->player->render(*target);
 	this->sword->render(*target);
 	this->demon->render(*target);

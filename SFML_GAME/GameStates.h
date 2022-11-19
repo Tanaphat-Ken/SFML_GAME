@@ -4,6 +4,7 @@
 #include "State.h"
 #include "PauseMenu.h"
 #include "Entity.h"
+#include "MainMenuState.h"
 
 class GameStates :
     public State 
@@ -15,10 +16,14 @@ private:
     float starttime = 0;
     std::stringstream ss1;
     std::stringstream ss2;
+    std::stringstream ssIm;
     sf::Clock Clock;
     sf::Font font;
     sf::Text current_score;
     sf::Text current_time;
+    sf::Text current_buff;
+    sf::Sound monster_dead;
+    sf::Sound Immortality_effect;
     sf::RectangleShape hpHidBar;
     sf::RectangleShape hpShowBar;
     PauseMenu* pmenu; 
@@ -43,6 +48,7 @@ private:
     //Attribute
     int immortality = 0;
     int immortal_time = 3;
+    int immortal_percent = 2;
     int playerHP = 30;
     int playerMaxHP = 30;
     int score = 0;
@@ -52,6 +58,7 @@ private:
     void initBackground();
     void initFonts();
     void initTextures();
+    void initSound();
     void initPauseMenu();
     void initEntity();
     void initHpBar();

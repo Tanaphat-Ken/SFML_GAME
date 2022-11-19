@@ -20,6 +20,7 @@ private:
     void initVariables();
     void initBackground();
     void initFonts();
+    void initMusic();
     void initButton();
 
 public:

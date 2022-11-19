@@ -28,6 +28,8 @@ protected:
 
 	//resources
 	std::map<std::string, sf::Texture> textures;
+	std::map<std::string, sf::Music> music;
+	std::map<std::string, sf::SoundBuffer> sounds;
 
 
 public:
