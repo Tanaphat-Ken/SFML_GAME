@@ -49,7 +49,7 @@ private:
     //Attribute
     int immortality = 0;
     int immortal_time = 3;
-    int immortal_percent = 2;
+    int immortal_percent = 5;
     int playerHP = 30;
     int playerMaxHP = 30;
 
