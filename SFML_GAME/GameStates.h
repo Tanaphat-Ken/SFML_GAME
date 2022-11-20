@@ -25,6 +25,8 @@ private:
     sf::Sound monster_dead;
     sf::Sound Immortality_effect;
     sf::Sound player_dead;
+    sf::Sound heal;
+    sf::Sound player_hurt;
     sf::RectangleShape hpHidBar;
     sf::RectangleShape hpShowBar;
     PauseMenu* pmenu; 

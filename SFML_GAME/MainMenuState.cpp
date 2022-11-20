@@ -100,7 +100,7 @@ void MainMenuState::updateButtons()
 	//Scoreboard
 	if (this->buttons["SCOREBOARD"]->isPressed())
 	{
-		this->states->push(new Scoreboard(this->window, this->states,score));
+		this->states->push(new Scoreboard(this->window, this->states, score, playerInput));
 	}
 	//quit
 	if (this->buttons["END_STATE"]->isPressed())
@@ -133,14 +133,4 @@ void MainMenuState::render(sf::RenderTarget* target)
 	target->draw(this->background);
 
 	this->renderButtons(*target);
-
-	//remove later
-	//sf::Text mouseText;
-	//mouseText.setPosition(this->mousePosView.x, this->mousePosView.y - 50);
-	//mouseText.setFont(this->font);
-	//mouseText.setCharacterSize(12);
-	//std::stringstream ss;
-	//ss << this->mousePosView.x << " " << this->mousePosView.y;
-	//mouseText.setString(ss.str());
-	//target->draw(mouseText);
 }

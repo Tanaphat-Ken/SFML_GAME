@@ -35,6 +35,7 @@ public:
 
     //Functions
 
+    int main();
     void updateInput(const float& dt);
     void updateButtons();
     void update(const float& dt);

@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Scoreboard.h"
 
 void Scoreboard::initBackground(sf::RenderWindow& window)
@@ -58,20 +59,14 @@ void Scoreboard::initText()
 	SCOREBOARD.setOrigin(SCOREBOARD.getGlobalBounds().width / 2, SCOREBOARD.getGlobalBounds().height / 2);
 	SCOREBOARD.setCharacterSize(75);
 	SCOREBOARD.setPosition(840, 80);
-
-	ss1 << score0;
-	score1.setString(ss1.str());
-	score1.setFont(font);
-	score1.setOrigin(score1.getGlobalBounds().width / 2, score1.getGlobalBounds().height / 2);
-	score1.setCharacterSize(50);
-	score1.setPosition(1350, 250);
 }
 
 //CON /DES
-Scoreboard::Scoreboard(sf::RenderWindow* window, std::stack<State*>* states, int score)
+Scoreboard::Scoreboard(sf::RenderWindow* window, std::stack<State*>* states, int score , std::string playerInput)
 	: State(window, states)
 {
 	score0 = score;
+	name0 = playerInput;
 	this->initFonts();
 	this->initButton();
 	this->initText();
@@ -84,6 +79,73 @@ Scoreboard::~Scoreboard()
 	for (it = this->buttons.begin(); it != this->buttons.end(); ++it)
 	{
 		delete it->second;
+	}
+}
+
+void Scoreboard::readFile()
+{
+	this->fp = fopen("./System/score.txt", "r");
+	for (int i = 0; i < 5; i++)
+	{
+		fscanf(fp, "%s", &temp);
+		name[i] = temp;
+		fscanf(fp, "%d", &score[i]);
+		userScore.push_back(make_pair(score[i], name[i]));
+	}
+}
+
+void Scoreboard::writeFile(std::string name, unsigned int score)
+{
+	readFile();
+	this->name[5] = name;
+	this->score[5] = score;
+	this->userScore.push_back(make_pair(this->score[5], this->name[5]));
+	sort(this->userScore.begin(), this->userScore.end());
+	fclose(this->fp);
+
+	fopen("./System/score.txt", "w");
+	for (int i = 5; i >= 1; i--)
+	{
+		strcpy(temp, userScore[i].second.c_str());
+		fprintf(fp, "%s %d\n", temp, userScore[i].first);
+	}
+	fclose(this->fp);
+}
+
+void Scoreboard::leaderBoard()
+{
+	readFile();
+	fclose(this->fp);
+	for (int i = 0; i < 5; i++)
+	{
+		this->numS[i].setFont(font);
+		this->nameS[i].setFont(font);
+		this->scoreS[i].setFont(font);
+
+		this->numS[i].setCharacterSize(60);
+		this->nameS[i].setCharacterSize(60);
+		this->scoreS[i].setCharacterSize(60);
+
+		this->numS[i].setFillColor(sf::Color::White);
+		this->nameS[i].setFillColor(sf::Color::White);
+		this->scoreS[i].setFillColor(sf::Color::White);
+
+		this->numS[i].setPosition(500.f, 330.f + (i * 100));
+		this->nameS[i].setPosition(550.f, 330.f + (i * 100));
+		this->scoreS[i].setPosition(1400.f, 330.f + (i * 100));
+
+
+		this->numS[i].setOrigin(0, this->numS[i].getLocalBounds().height);
+		this->nameS[i].setOrigin(0, this->nameS[i].getLocalBounds().height);
+		this->scoreS[i].setOrigin(this->scoreS[i].getLocalBounds().width, this->scoreS[i].getLocalBounds().height);
+
+		this->numS[i].setString(std::to_string(i + 1) + ". ");
+		this->nameS[i].setString(name[i]);
+		this->scoreS[i].setString(std::to_string(score[i]) + " P");
+
+		this->window->draw(numS[i]);
+		this->window->draw(nameS[i]);
+		this->window->draw(scoreS[i]);
 	}
 }
 
@@ -130,7 +192,7 @@ void Scoreboard::render(sf::RenderTarget* target)
 	target->draw(this->bg);
 	target->draw(this->container);
 	target->draw(this->SCOREBOARD);
-	target->draw(this->score1);
 	this->renderButtons(*target);
+	leaderBoard();
 
 }

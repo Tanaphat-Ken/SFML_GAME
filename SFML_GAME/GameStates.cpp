@@ -84,6 +84,20 @@ void GameStates::initSound()
 	}
 	player_dead.setBuffer(this->sounds["DEAD"]);
 	player_dead.setVolume(10);
+
+	if (!this->sounds["HEAL"].loadFromFile("Resources/Sound/Sound Effect/heal-up-39285.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HEAL";
+	}
+	heal.setBuffer(this->sounds["HEAL"]);
+	heal.setVolume(10);
+
+	if (!this->sounds["HURT"].loadFromFile("Resources/Sound/Sound Effect/ough.ogg"))
+	{
+		throw "ERROR::GAME_STATE::COULD_NOT_LOAD_HURT";
+	}
+	player_hurt.setBuffer(this->sounds["HURT"]);
+	player_hurt.setVolume(12);
 }
 
 void GameStates::initPauseMenu()
@@ -480,6 +494,7 @@ void GameStates::update(const float& dt)
 			else
 			{
 				playerHP = 0;
+				player_hurt.play();
 				this->demon->setPosition(rand() % 1920, rand() % 950);
 			}
 		}
@@ -507,6 +522,7 @@ void GameStates::update(const float& dt)
 				else
 				{
 					this->goblin[i]->setPosition(rand() % 1920, rand() % 950);
+					player_hurt.play();
 					playerHP -= 5;
 				}
 			}
@@ -521,7 +537,10 @@ void GameStates::update(const float& dt)
 					if (playerHP >= playerMaxHP)
 						continue;
 					else
+					{
 						playerHP += 2;
+						heal.play();
+					}
 				}
 				if (drop_from_goblin <= immortal_percent)
 				{
@@ -555,6 +574,7 @@ void GameStates::update(const float& dt)
 					}
 					else
 					{
+						player_hurt.play();
 						playerHP = 0;
 						this->zombie[i]->setPosition(rand() % 1920, rand() % 950);
 					}
@@ -587,6 +607,7 @@ void GameStates::update(const float& dt)
 					else
 					{
 						playerHP -= 9;
+						player_hurt.play();
 						this->skeleton[i]->setPosition(rand() % 1920, rand() % 950);
 					}
 				}
@@ -601,7 +622,10 @@ void GameStates::update(const float& dt)
 						if (playerHP >= playerMaxHP)
 							continue;
 						else
+						{
 							playerHP += 1;
+							heal.play();
+						}
 					}
 					if (drop_from_skeleton <= immortal_percent)
 					{
@@ -636,6 +660,7 @@ void GameStates::update(const float& dt)
 					else
 					{
 						playerHP -= 12;
+						player_hurt.play();
 						if (imp_move[i] == 0)
 							this->imp[i]->setPosition(rand() % 50 + 1970, rand() % 950);
 						else if (imp_move[i] == 1)
@@ -656,7 +681,10 @@ void GameStates::update(const float& dt)
 						if (playerHP >= playerMaxHP)
 							continue;
 						else
+						{
 							playerHP += 4;
+							heal.play();
+						}
 					}
 					if (drop_from_imp <= immortal_percent)
 					{

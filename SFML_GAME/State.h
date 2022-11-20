@@ -38,6 +38,7 @@ public:
 	virtual ~State();
 
 	//Attribute
+	std::string playerInput;
 	int score = 0;
 	float Time = 0;
 
