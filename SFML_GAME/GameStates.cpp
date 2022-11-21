@@ -436,10 +436,12 @@ void GameStates::update(const float& dt)
 	if(!this->Pause) //unpause
 	{
 		float Time = Clock.getElapsedTime().asSeconds();
-		std::cout << Time << std::endl;
+
+		/*std::cout << Time << std::endl;
 		std::cout << playerHP << std::endl;
 		std::cout << score << std::endl;
-		std::cout << std::endl;
+		std::cout << std::endl;*/
+
 		this->updatePlayerInput(dt);
 		this->updateText(score,Time);
 		this->updateHpBar();
