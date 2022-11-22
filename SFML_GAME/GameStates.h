@@ -34,13 +34,13 @@ private:
     sf::Texture backgroundTexture;
     sf::RectangleShape background;
     sf::RenderTexture renderTexture;
-    #define goblin_size 10 //0 sec
+    #define goblin_size 20 //0 sec
     #define skeleton_size 10 //45 sec
     #define imp_size 3 //85 sec
     #define zombie_size 2 //150 sec
     Player* player;
     Sword* sword;
-    Goblin* goblin[10];
+    Goblin* goblin[20];
     Skeleton* skeleton[10];
     Imp* imp[3];
     Zombie* zombie[2]; //150 sec
